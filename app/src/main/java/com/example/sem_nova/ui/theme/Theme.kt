@@ -14,6 +14,15 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.compose.material3.Typography
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
+import com.example.sem_nova.R
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -36,6 +45,19 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+
+val CustomFont = FontFamily(
+    Font(R.font.relay_kavoon_regular)
+)
+
+val LocalCustomFont = compositionLocalOf<FontFamily> { error(R.string.font_error) }
+
+@Composable
+fun ProvideCustomFont(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalCustomFont provides CustomFont) {
+        content()
+    }
+}
 
 @Composable
 fun SEM_NOVATheme(
@@ -65,6 +87,11 @@ fun SEM_NOVATheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = {
+            val customFont = remember { CustomFont }
+            CompositionLocalProvider(LocalCustomFont provides customFont) {
+                content()
+            }
+        }
     )
 }

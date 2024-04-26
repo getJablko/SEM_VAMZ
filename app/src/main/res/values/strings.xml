@@ -2,5 +2,8 @@
     <string name="app_name">SEM_NOVA</string>
     <string name="login_hint">Login</string>
     <string name="password_hint">Password</string>
+    <string name="font_error">No custom font provided</string>
     <string name="_hint"></string>
+    <string name="welcome_hint">Welcome to WareFlow app!</string>
+
 </resources>
