@@ -54,6 +54,5 @@ fun LoginScreen() {
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-
     LoginContent()
 }
