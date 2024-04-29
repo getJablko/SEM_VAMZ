@@ -16,4 +16,6 @@
     <string name="price">Final price: </string>
     <string name="createOrder">Create order</string>
     <string name="storage">Storage</string>
+    <string name="correctLogin">admin</string>
+    <string name="wrongLogin">Wrong data</string>
 </resources>

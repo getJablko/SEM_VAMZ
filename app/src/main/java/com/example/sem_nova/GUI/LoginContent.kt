@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +44,6 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
     val focusRequester = remember { FocusRequester() }
     val customFont = LocalCustomFont.current
     var isTextFieldFocused by remember { mutableStateOf(false) }
-    var showError by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -96,8 +97,10 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                 .shadow(10.dp, shape = RoundedCornerShape(30.dp))
                 .onFocusChanged { focusState ->
                     isTextFieldFocused = focusState.isFocused
-                    if (focusState.isFocused && !LoginText.isEmpty() && LoginText == context.getString(
+                    if ((focusState.isFocused && !LoginText.isEmpty() && LoginText == context.getString(
                             R.string.login_hint
+                        )) || LoginText == context.getString(
+                            R.string.wrongLogin
                         )
                     ) {
                         LoginText = context.getString(R.string._hint)
@@ -117,8 +120,6 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
             ),
             singleLine = true,
             value = PasswdText,
@@ -130,6 +131,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                 fontFamily = customFont, // Nastavenie vlastného fontu
                 fontSize = 16.sp
             ),
+            visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
                 .padding(30.dp, 15.dp)
                 .fillMaxWidth()
@@ -138,6 +140,8 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                 .onFocusChanged { focusState ->
                     if (focusState.isFocused && !PasswdText.isEmpty() && PasswdText == context.getString(
                             R.string.password_hint
+                        ) || PasswdText == context.getString(
+                            R.string.wrongLogin
                         )
                     ) {
                         PasswdText = context.getString(R.string._hint)
@@ -161,11 +165,11 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                 contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
             ),
             onClick = {
-                if (LoginText == "admin" && PasswdText == "admin") {
-                    showError = false
+                val password = PasswdText
+                if (LoginText == context.getString(R.string.correctLogin) && password == context.getString(R.string.correctLogin)) {
                     onLoginSuccess()
                 } else {
-                    showError = true
+                    LoginText = context.getString(R.string.wrongLogin)
                 }
             },
             modifier = Modifier
@@ -183,4 +187,6 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
             )
         }
     }
+
 }
+
