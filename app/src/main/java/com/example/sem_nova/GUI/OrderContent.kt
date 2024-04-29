@@ -40,7 +40,7 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
 @Composable
-fun OrderContent() {
+fun OrderContent(onHome: () -> Unit) {
     val context = LocalContext.current
     val customFont = LocalCustomFont.current
     val focusRequester = remember { FocusRequester() }
@@ -57,7 +57,7 @@ fun OrderContent() {
     ) {
         Row() {
             IconButton(
-                onClick = { /* Handle button click */ },
+                onClick = { onHome() },
                 modifier = Modifier
                     .size(100.dp)
                     .padding(12.dp)

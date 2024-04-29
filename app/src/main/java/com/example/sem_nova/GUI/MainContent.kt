@@ -31,7 +31,10 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
 @Composable
-fun MainContent(onLogout: () -> Unit) {
+fun MainContent(onLogout: () -> Unit,
+                onReciveOrder: () -> Unit,
+                onNewOrder: () -> Unit,
+                onStorage: () -> Unit) {
     val customFont = LocalCustomFont.current
 
     Column(
@@ -67,7 +70,7 @@ fun MainContent(onLogout: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = { /* Handle button click */ },
+                onClick = { onReciveOrder() },
                 modifier = Modifier
                     .size(180.dp)
 
@@ -79,7 +82,7 @@ fun MainContent(onLogout: () -> Unit) {
                 )
             }
             IconButton(
-                onClick = { /* Handle button click */ },
+                onClick = { onNewOrder() },
                 modifier = Modifier
                     .size(180.dp)
             ) {
@@ -98,7 +101,7 @@ fun MainContent(onLogout: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = { /* Handle button click */ },
+                onClick = { onStorage() },
                 modifier = Modifier
                     .size(180.dp)
             ) {

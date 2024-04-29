@@ -32,7 +32,7 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
 @Composable
-fun StorageContent() {
+fun StorageContent(onHome: () -> Unit) {
     val customFont = LocalCustomFont.current
 
     Column(
@@ -40,7 +40,7 @@ fun StorageContent() {
     ) {
         Row() {
             IconButton(
-                onClick = { /* Handle button click */ },
+                onClick = { onHome() },
                 modifier = Modifier
                     .size(100.dp)
                     .padding(12.dp)

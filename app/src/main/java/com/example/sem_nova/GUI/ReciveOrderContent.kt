@@ -43,7 +43,7 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 @Composable
-fun ReciveOrderContent() {
+fun ReciveOrderContent(onHome: () -> Unit) {
     val context = LocalContext.current
     val customFont = LocalCustomFont.current
     val focusRequester = remember { FocusRequester() }
@@ -57,7 +57,7 @@ fun ReciveOrderContent() {
     ) {
         Row() {
             IconButton(
-                onClick = { /* Handle button click */ },
+                onClick = { onHome() },
                 modifier = Modifier
                     .size(100.dp)
                     .padding(12.dp)

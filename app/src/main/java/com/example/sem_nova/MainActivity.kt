@@ -63,9 +63,12 @@ fun MainScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    MainContent(onLogout = {
-        navController.navigate("login")
-    })
+    MainContent(
+        onLogout = { navController.navigate("login") },
+        onReciveOrder = { navController.navigate("receive_order") },
+        onNewOrder = { navController.navigate("order") },
+        onStorage = { navController.navigate("storage") }
+    )
 
 }
 
@@ -77,7 +80,9 @@ fun ReciveOrderScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    ReciveOrderContent()
+    ReciveOrderContent(
+        onHome = { navController.navigate("main") }
+    )
 }
 
 @Composable
@@ -88,7 +93,9 @@ fun OrderScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    OrderContent()
+    OrderContent(
+        onHome = { navController.navigate("main") }
+    )
 }
 
 @Composable
@@ -99,5 +106,7 @@ fun StorageScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    StorageContent()
+    StorageContent(
+        onHome = { navController.navigate("main") }
+    )
 }
