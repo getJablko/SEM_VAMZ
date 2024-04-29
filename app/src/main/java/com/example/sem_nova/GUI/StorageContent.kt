@@ -66,7 +66,6 @@ fun StorageContent() {
             modifier = Modifier.shadow(75.dp)
         ) {
             Text(
-
                 text = stringResource(id = R.string.storage),
                 fontFamily = customFont,
                 color = Color.White,
