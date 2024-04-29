@@ -1,5 +1,6 @@
 package com.example.sem_nova.GUI
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,13 +35,14 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
 @Composable
-fun LoginContent() {
+fun LoginContent(onLoginSuccess: () -> Unit) {
     val context = LocalContext.current
     var LoginText by remember { mutableStateOf(context.getString(R.string.login_hint)) }
     var PasswdText by remember { mutableStateOf(context.getString(R.string.password_hint)) }
     val focusRequester = remember { FocusRequester() }
     val customFont = LocalCustomFont.current
     var isTextFieldFocused by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -74,6 +76,7 @@ fun LoginContent() {
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
+
             singleLine = true,
             value = LoginText,
             onValueChange = { newText ->
@@ -157,7 +160,14 @@ fun LoginContent() {
                 containerColor = Color.White,
                 contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
             ),
-            onClick = { /* Handle login button click */ },
+            onClick = {
+                if (LoginText == "admin" && PasswdText == "admin") {
+                    showError = false
+                    onLoginSuccess()
+                } else {
+                    showError = true
+                }
+            },
             modifier = Modifier
                 .padding(75.dp, 15.dp)
                 .fillMaxWidth()

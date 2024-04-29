@@ -11,6 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.sem_nova.GUI.LoginContent
 import com.example.sem_nova.GUI.MainContent
 import com.example.sem_nova.GUI.OrderContent
@@ -24,11 +28,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             SEM_NOVATheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
-                    //LoginScreen()
-                    //MainScreen()
-                    //ReciveOrderScreen()
-                    //OrderScreen()
-                    StorageScreen()
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable("login") { LoginScreen(navController) }
+                        composable("main") { MainScreen(navController) }
+                        composable("receive_order") { ReciveOrderScreen(navController) }
+                        composable("order") { OrderScreen(navController) }
+                        composable("storage") { StorageScreen(navController) }
+                    }
                 }
             }
         }
@@ -36,29 +43,34 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     Image(
         painter = painterResource(id = R.drawable.img),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    LoginContent()
+    LoginContent(onLoginSuccess = {
+        navController.navigate("main")
+    })
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     Image(
         painter = painterResource(id = R.drawable.img),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    MainContent()
+    MainContent(onLogout = {
+        navController.navigate("login")
+    })
+
 }
 
 @Composable
-fun ReciveOrderScreen() {
+fun ReciveOrderScreen(navController: NavController) {
     Image(
         painter = painterResource(id = R.drawable.img),
         contentDescription = null,
@@ -69,7 +81,7 @@ fun ReciveOrderScreen() {
 }
 
 @Composable
-fun OrderScreen() {
+fun OrderScreen(navController: NavController) {
     Image(
         painter = painterResource(id = R.drawable.img),
         contentDescription = null,
@@ -80,7 +92,7 @@ fun OrderScreen() {
 }
 
 @Composable
-fun StorageScreen() {
+fun StorageScreen(navController: NavController) {
     Image(
         painter = painterResource(id = R.drawable.img),
         contentDescription = null,

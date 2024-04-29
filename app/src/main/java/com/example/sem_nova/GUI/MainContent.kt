@@ -31,7 +31,7 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
 @Composable
-fun MainContent() {
+fun MainContent(onLogout: () -> Unit) {
     val customFont = LocalCustomFont.current
 
     Column(
@@ -115,7 +115,7 @@ fun MainContent() {
                 containerColor = Color.White,
                 contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
             ),
-            onClick = { /* Handle login button click */ },
+            onClick = { onLogout() },
             modifier = Modifier
                 .padding(75.dp, 15.dp)
                 .fillMaxWidth()
