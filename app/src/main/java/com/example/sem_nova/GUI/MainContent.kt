@@ -34,13 +34,13 @@ import com.example.sem_nova.ui.theme.LocalCustomFont
 fun MainContent() {
     val customFont = LocalCustomFont.current
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Spacer(modifier = Modifier.height(120.dp))
 
         Box(
@@ -58,7 +58,7 @@ fun MainContent() {
             )
         }
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Row(
             modifier = Modifier
@@ -69,26 +69,24 @@ fun MainContent() {
             IconButton(
                 onClick = { /* Handle button click */ },
                 modifier = Modifier
-                    .size(160.dp)
+                    .size(180.dp)
+
             ) {
-                // Image with text
                 Image(
                     painter = painterResource(R.drawable.reciveorder),
                     contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(120.dp)
+                    modifier = Modifier.size(140.dp)
                 )
             }
-
             IconButton(
                 onClick = { /* Handle button click */ },
                 modifier = Modifier
-                    .size(160.dp)
+                    .size(180.dp)
             ) {
-                // Image with text
                 Image(
                     painter = painterResource(R.drawable.neworder),
                     contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(120.dp)
+                    modifier = Modifier.size(140.dp)
                 )
             }
         }
@@ -102,13 +100,12 @@ fun MainContent() {
             IconButton(
                 onClick = { /* Handle button click */ },
                 modifier = Modifier
-                    .size(160.dp)
+                    .size(180.dp)
             ) {
-                // Image with text
                 Image(
                     painter = painterResource(R.drawable.storage),
                     contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(120.dp)
+                    modifier = Modifier.size(140.dp)
                 )
             }
         }
@@ -125,7 +122,6 @@ fun MainContent() {
                 .shadow(10.dp, shape = RoundedCornerShape(30.dp))
                 .height(45.dp)
         ) {
-
             Text(
                 text = stringResource(R.string.Logout),
                 fontFamily = customFont, // vlastný font pre text
@@ -135,9 +131,5 @@ fun MainContent() {
         }
 
     }
-
-
-
-
 
 }

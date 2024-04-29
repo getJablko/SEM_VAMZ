@@ -8,5 +8,12 @@
     <string name="welcomeBack_hint">Welcome back!</string>
     <string name="icon">icon</string>
     <string name="Logout">Logout</string>
-
+    <string name="reciveOrder">Confirm recived order</string>
+    <string name="recivedOrderNumberOrder">Recived order number:</string>
+    <string name="newOrder">New order:</string>
+    <string name="productName">Product name</string>
+    <string name="productQuantity">Product quantity</string>
+    <string name="price">Final price: </string>
+    <string name="createOrder">Create order</string>
+    <string name="storage">Storage</string>
 </resources>

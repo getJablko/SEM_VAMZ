@@ -13,6 +13,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.example.sem_nova.GUI.LoginContent
 import com.example.sem_nova.GUI.MainContent
+import com.example.sem_nova.GUI.OrderContent
+import com.example.sem_nova.GUI.ReciveOrderContent
+import com.example.sem_nova.GUI.StorageContent
 import com.example.sem_nova.ui.theme.SEM_NOVATheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +25,10 @@ class MainActivity : ComponentActivity() {
             SEM_NOVATheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     //LoginScreen()
-                    MainScreen()
+                    //MainScreen()
+                    //ReciveOrderScreen()
+                    //OrderScreen()
+                    StorageScreen()
                 }
             }
         }
@@ -49,4 +55,37 @@ fun MainScreen() {
         contentScale = ContentScale.FillBounds
     )
     MainContent()
+}
+
+@Composable
+fun ReciveOrderScreen() {
+    Image(
+        painter = painterResource(id = R.drawable.img),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.FillBounds
+    )
+    ReciveOrderContent()
+}
+
+@Composable
+fun OrderScreen() {
+    Image(
+        painter = painterResource(id = R.drawable.img),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.FillBounds
+    )
+    OrderContent()
+}
+
+@Composable
+fun StorageScreen() {
+    Image(
+        painter = painterResource(id = R.drawable.img),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.FillBounds
+    )
+    StorageContent()
 }
