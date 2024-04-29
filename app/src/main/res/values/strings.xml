@@ -5,5 +5,8 @@
     <string name="font_error">No custom font provided</string>
     <string name="_hint"></string>
     <string name="welcome_hint">Welcome to WareFlow app!</string>
+    <string name="welcomeBack_hint">Welcome back!</string>
+    <string name="icon">icon</string>
+    <string name="Logout">Logout</string>
 
 </resources>

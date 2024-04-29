@@ -1,4 +1,4 @@
-package com.example.sem_nova
+package com.example.sem_nova.GUI
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
 @Composable
