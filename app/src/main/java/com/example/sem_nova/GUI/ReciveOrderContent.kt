@@ -1,5 +1,9 @@
 package com.example.sem_nova.GUI
 
+import android.content.Intent
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,6 +55,8 @@ fun ReciveOrderContent(onHome: () -> Unit) {
     var RecivedOrderNumberText by remember {
         mutableStateOf(context.getString(R.string.recivedOrderNumberOrder))
     }
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* handle result if needed */ }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -149,7 +155,7 @@ fun ReciveOrderContent(onHome: () -> Unit) {
                 containerColor = Color.White,
                 contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
             ),
-            onClick = { /* Handle login button click */ },
+            onClick = {},
             modifier = Modifier
                 .padding(46.dp, 15.dp)
                 .fillMaxWidth()
@@ -167,7 +173,11 @@ fun ReciveOrderContent(onHome: () -> Unit) {
         Spacer(modifier = Modifier.height(10.dp))
 
         IconButton(
-            onClick = { /* Handle button click */ },
+
+            onClick = {
+                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                cameraLauncher.launch(takePictureIntent)
+            },
             modifier = Modifier
                 .size(190.dp)
         ) {
