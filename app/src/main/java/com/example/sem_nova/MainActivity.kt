@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") {
-                            //requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
                             LoginScreen(navController)
                         }
                         composable("main") {
