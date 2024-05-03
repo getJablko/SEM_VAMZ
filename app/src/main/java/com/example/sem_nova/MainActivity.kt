@@ -1,5 +1,6 @@
 package com.example.sem_nova
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,11 +31,26 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "login") {
-                        composable("login") { LoginScreen(navController) }
-                        composable("main") { MainScreen(navController) }
-                        composable("receive_order") { ReciveOrderScreen(navController) }
-                        composable("order") { OrderScreen(navController) }
-                        composable("storage") { StorageScreen(navController) }
+                        composable("login") {
+                            //requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                            LoginScreen(navController)
+                        }
+                        composable("main") {
+                            MainScreen(navController)
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        }
+                        composable("receive_order") {
+                            ReciveOrderScreen(navController)
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        }
+                        composable("order") {
+                            OrderScreen(navController)
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        }
+                        composable("storage") {
+                            StorageScreen(navController)
+                            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                        }
                     }
                 }
             }
