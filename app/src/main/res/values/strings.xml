@@ -8,8 +8,8 @@
     <string name="welcomeBack_hint">Welcome back!</string>
     <string name="icon">icon</string>
     <string name="Logout">Logout</string>
-    <string name="reciveOrder">Confirm recived order</string>
-    <string name="recivedOrderNumberOrder">Recived order number:</string>
+    <string name="receiveOrder">Confirm order</string>
+    <string name="receivedOrderNumberOrder">Received order number:</string>
     <string name="newOrder">New order:</string>
     <string name="productName">Product name</string>
     <string name="productQuantity">Product quantity</string>

@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,20 +56,9 @@ fun OrderContent(onHome: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row() {
-            IconButton(
-                onClick = { onHome() },
-                modifier = Modifier
-                    .size(100.dp)
-                    .padding(12.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.home),
-                    contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(55.dp)
-                )
-            }
-        }
+        HomeButton1(
+            onHome = onHome
+        )
     }
 
     Column(
@@ -79,23 +69,9 @@ fun OrderContent(onHome: () -> Unit) {
     ) {
 
         Spacer(modifier = Modifier.height(130.dp))
-
-        Box(
-            modifier = Modifier.shadow(75.dp)
-        ) {
-            Text(
-
-                text = stringResource(id = R.string.newOrder),
-                fontFamily = customFont,
-                color = Color.White,
-                fontSize = 42.sp,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    lineHeight = 42.sp,
-                )
-            )
-        }
-
+        Text1(
+            customFont = customFont
+        )
         Spacer(modifier = Modifier.height(40.dp))
 
         TextField(
@@ -187,42 +163,96 @@ fun OrderContent(onHome: () -> Unit) {
         )
 
         Spacer(modifier = Modifier.height(20.dp))
-
-        Box(
-            modifier = Modifier.shadow(75.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.price),
-                fontFamily = customFont,
-                color = Color.White,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-
-            )
-        }
+        FinalPriceText(
+            customFont = customFont
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
-            ),
-            onClick = { /* Handle login button click */ },
-            modifier = Modifier
-                .padding(75.dp, 15.dp)
-                .fillMaxWidth()
-                .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                .height(45.dp)
-        ) {
-            Text(
-                text = context.getString(R.string.createOrder),
-                fontFamily = customFont, // vlastný font pre text
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center
+        CreateOrderButton(
+            customFont = customFont
+        )
+    }
+}
+
+@Composable
+fun HomeButton1(
+    onHome: () -> Unit
+) {
+    IconButton(
+        onClick = { onHome() },
+        modifier = Modifier
+            .size(100.dp)
+            .padding(12.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.home),
+            contentDescription = (stringResource(R.string.icon)),
+            modifier = Modifier.size(55.dp)
+        )
+    }
+}
+
+@Composable
+fun Text1(
+    customFont: FontFamily
+) {
+    Box(
+        modifier = Modifier.shadow(75.dp)
+    ) {
+        Text(
+
+            text = stringResource(id = R.string.newOrder),
+            fontFamily = customFont,
+            color = Color.White,
+            fontSize = 42.sp,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                lineHeight = 42.sp,
             )
-        }
+        )
+    }
+}
 
+@Composable
+fun FinalPriceText(
+    customFont: FontFamily
+) {
+    Box(
+        modifier = Modifier.shadow(75.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.price),
+            fontFamily = customFont,
+            color = Color.White,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
 
+@Composable
+fun CreateOrderButton(
+    customFont: FontFamily
+) {
+    val context = LocalContext.current
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White,
+            contentColor = Color(222, 77, 222)
+        ),
+        onClick = { /* Handle login button click */ },
+        modifier = Modifier
+            .padding(75.dp, 15.dp)
+            .fillMaxWidth()
+            .shadow(10.dp, shape = RoundedCornerShape(30.dp))
+            .height(45.dp)
+    ) {
+        Text(
+            text = context.getString(R.string.createOrder),
+            fontFamily = customFont,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center
+        )
     }
 }

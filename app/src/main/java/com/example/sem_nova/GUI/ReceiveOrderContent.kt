@@ -1,11 +1,14 @@
 package com.example.sem_nova.GUI
 
 import android.content.Intent
+import android.content.pm.LauncherActivityInfo
+import android.content.pm.LauncherApps
+import android.graphics.Camera
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,7 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 import androidx.compose.ui.platform.LocalContext
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import androidx.compose.ui.text.font.FontFamily
 
 
 @Composable
@@ -53,7 +56,7 @@ fun ReciveOrderContent(onHome: () -> Unit) {
     val focusRequester = remember { FocusRequester() }
     var isTextFieldFocused by remember { mutableStateOf(false) }
     var RecivedOrderNumberText by remember {
-        mutableStateOf(context.getString(R.string.recivedOrderNumberOrder))
+        mutableStateOf(context.getString(R.string.receivedOrderNumberOrder))
     }
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* handle result if needed */ }
@@ -61,20 +64,9 @@ fun ReciveOrderContent(onHome: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row() {
-            IconButton(
-                onClick = { onHome() },
-                modifier = Modifier
-                    .size(100.dp)
-                    .padding(12.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.home),
-                    contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(55.dp)
-                )
-            }
-        }
+        HomeButton(
+            onHome = onHome
+        )
     }
 
     Column(
@@ -86,21 +78,7 @@ fun ReciveOrderContent(onHome: () -> Unit) {
 
         Spacer(modifier = Modifier.height(130.dp))
 
-        Box(
-            modifier = Modifier.shadow(75.dp)
-        ) {
-            Text(
-
-                text = stringResource(id = R.string.welcomeBack_hint),
-                fontFamily = customFont,
-                color = Color.White,
-                fontSize = 42.sp,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    lineHeight = 42.sp,
-                )
-            )
-        }
+        Text(customFont = customFont)
 
         Spacer(modifier = Modifier.height(40.dp))
 
@@ -131,61 +109,112 @@ fun ReciveOrderContent(onHome: () -> Unit) {
                 .onFocusChanged { focusState ->
                     isTextFieldFocused = focusState.isFocused
                     if (focusState.isFocused && !RecivedOrderNumberText.isEmpty() && RecivedOrderNumberText == context.getString(
-                            R.string.recivedOrderNumberOrder
+                            R.string.receivedOrderNumberOrder
                         )
                     ) {
                         RecivedOrderNumberText = context.getString(R.string._hint)
                     } else if (focusState.isFocused && !RecivedOrderNumberText.isEmpty() && RecivedOrderNumberText != context.getString(
-                            R.string.recivedOrderNumberOrder
+                            R.string.receivedOrderNumberOrder
                         )
                     ) {
                         // do nothing
                     } else if (!focusState.isFocused && RecivedOrderNumberText.isEmpty()) {
                         RecivedOrderNumberText =
-                            context.getString(R.string.recivedOrderNumberOrder)
+                            context.getString(R.string.receivedOrderNumberOrder)
                     }
                 },
             shape = RoundedCornerShape(30.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
-
-        Button(
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
-            ),
-            onClick = {},
-            modifier = Modifier
-                .padding(46.dp, 15.dp)
-                .fillMaxWidth()
-                .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                .height(45.dp)
-        ) {
-            Text(
-                text = context.getString(R.string.reciveOrder),
-                fontFamily = customFont, // vlastný font pre text
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-
+        ReceivedOrderButton(
+            customFont = customFont
+        )
         Spacer(modifier = Modifier.height(10.dp))
+        ScanButton(
+            cameraLauncher = cameraLauncher
+        )
+    }
+}
 
-        IconButton(
+@Composable
+fun HomeButton(
+    onHome: () -> Unit
+) {
+    IconButton(
+        onClick = { onHome() },
+        modifier = Modifier
+            .size(100.dp)
+            .padding(12.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.home),
+            contentDescription = (stringResource(R.string.icon)),
+            modifier = Modifier.size(55.dp)
+        )
+    }
+}
 
-            onClick = {
-                val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                cameraLauncher.launch(takePictureIntent)
-            },
-            modifier = Modifier
-                .size(190.dp)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.scan),
-                contentDescription = (stringResource(R.string.icon)),
-                modifier = Modifier.size(140.dp)
+@Composable
+fun Text(customFont: FontFamily) {
+    Box(
+        modifier = Modifier.shadow(75.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.welcomeBack_hint),
+            fontFamily = customFont,
+            color = Color.White,
+            fontSize = 42.sp,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                lineHeight = 42.sp,
             )
-        }
+        )
+    }
+}
+
+@Composable
+fun ReceivedOrderButton(
+    customFont: FontFamily,
+) {
+    val context = LocalContext.current
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White,
+            contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
+        ),
+        onClick = {/* TODO */},
+        modifier = Modifier
+            .padding(46.dp, 15.dp)
+            .fillMaxWidth()
+            .shadow(10.dp, shape = RoundedCornerShape(30.dp))
+            .height(45.dp)
+    ) {
+        Text(
+            text = context.getString(R.string.receiveOrder),
+            fontFamily = customFont, // vlastný font pre text
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun ScanButton(
+    cameraLauncher: ActivityResultLauncher<Intent>
+) {
+    IconButton(
+        onClick = {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            cameraLauncher.launch(takePictureIntent)
+        },
+        modifier = Modifier
+            .size(190.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.scan),
+            contentDescription = (stringResource(R.string.icon)),
+            modifier = Modifier.size(140.dp)
+        )
     }
 }

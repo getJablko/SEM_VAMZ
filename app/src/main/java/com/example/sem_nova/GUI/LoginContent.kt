@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -35,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -113,7 +115,8 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                         LoginText = context.getString(R.string.login_hint)
                     }
                 },
-            shape = RoundedCornerShape(30.dp)
+            shape = RoundedCornerShape(30.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
         )
 
         TextField(
@@ -156,7 +159,8 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                         PasswdText = context.getString(R.string.password_hint)
                     }
                 },
-            shape = RoundedCornerShape(30.dp)
+            shape = RoundedCornerShape(30.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
         )
 
         Spacer(modifier = Modifier.height(spacerList[2]))
@@ -167,6 +171,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
             onLoginSuccess = onLoginSuccess,
             onLoginFailed = { // Callback to handle incorrect login
                 LoginText = context.getString(R.string.wrongLogin)
+                PasswdText = context.getString(R.string._hint)
             },
             spacerList = spacerList
         )

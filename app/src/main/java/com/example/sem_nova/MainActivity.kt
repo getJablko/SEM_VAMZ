@@ -81,7 +81,7 @@ fun MainScreen(navController: NavController) {
     )
     MainContent(
         onLogout = { navController.navigate("login") },
-        onReciveOrder = { navController.navigate("receive_order") },
+        onReceiveOrder = { navController.navigate("receive_order") },
         onNewOrder = { navController.navigate("order") },
         onStorage = { navController.navigate("storage") }
     )

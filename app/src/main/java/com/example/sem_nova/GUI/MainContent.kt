@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,10 +32,12 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
 @Composable
-fun MainContent(onLogout: () -> Unit,
-                onReciveOrder: () -> Unit,
-                onNewOrder: () -> Unit,
-                onStorage: () -> Unit) {
+fun MainContent(
+    onLogout: () -> Unit,
+    onReceiveOrder: () -> Unit,
+    onNewOrder: () -> Unit,
+    onStorage: () -> Unit
+) {
     val customFont = LocalCustomFont.current
 
     Column(
@@ -45,22 +48,9 @@ fun MainContent(onLogout: () -> Unit,
     ) {
 
         Spacer(modifier = Modifier.height(120.dp))
-
-        Box(
-            modifier = Modifier.shadow(75.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.welcomeBack_hint),
-                fontFamily = customFont,
-                color = Color.White,
-                fontSize = 42.sp,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    lineHeight = 42.sp,
-                )
-            )
-        }
-
+        MenuText(
+            customFont = customFont
+        )
         Spacer(modifier = Modifier.height(10.dp))
 
         Row(
@@ -69,70 +59,119 @@ fun MainContent(onLogout: () -> Unit,
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = { onReciveOrder() },
-                modifier = Modifier
-                    .size(180.dp)
-
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.reciveorder),
-                    contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(140.dp)
-                )
-            }
-            IconButton(
-                onClick = { onNewOrder() },
-                modifier = Modifier
-                    .size(180.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.neworder),
-                    contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(140.dp)
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = { onStorage() },
-                modifier = Modifier
-                    .size(180.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.storage),
-                    contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(140.dp)
-                )
-            }
-        }
-
-        Button(
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
-            ),
-            onClick = { onLogout() },
-            modifier = Modifier
-                .padding(75.dp, 15.dp)
-                .fillMaxWidth()
-                .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                .height(45.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.Logout),
-                fontFamily = customFont, // vlastný font pre text
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center
+            ButtonRecieveOrder(
+                onReceiveOrder = onReceiveOrder
+            )
+            ButtonNewOrder(
+                onNewOrder = onNewOrder
             )
         }
-
+        ButtonStorage(
+            onStorage = onStorage
+        )
+        LogoutButton(
+            customFont = customFont,
+            onLogout = onLogout
+        )
     }
-
 }
+
+@Composable
+fun MenuText(
+    customFont: FontFamily
+) {
+    Box(
+        modifier = Modifier
+            .shadow(75.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.welcomeBack_hint),
+            fontFamily = customFont,
+            color = Color.White,
+            fontSize = 42.sp,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                lineHeight = 42.sp,
+            )
+        )
+    }
+}
+
+@Composable
+fun ButtonRecieveOrder(
+    onReceiveOrder: () -> Unit
+) {
+    IconButton(
+        onClick = { onReceiveOrder() },
+        modifier = Modifier
+            .size(180.dp)
+
+    ) {
+        Image(
+            painter = painterResource(R.drawable.reciveorder),
+            contentDescription = (stringResource(R.string.icon)),
+            modifier = Modifier.size(140.dp)
+        )
+    }
+}
+
+@Composable
+fun ButtonNewOrder(
+    onNewOrder: () -> Unit
+) {
+    IconButton(
+        onClick = { onNewOrder() },
+        modifier = Modifier
+            .size(180.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.neworder),
+            contentDescription = (stringResource(R.string.icon)),
+            modifier = Modifier.size(140.dp)
+        )
+    }
+}
+
+@Composable
+fun ButtonStorage(
+    onStorage: () -> Unit
+) {
+    IconButton(
+        onClick = { onStorage() },
+        modifier = Modifier
+            .size(180.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.storage),
+            contentDescription = (stringResource(R.string.icon)),
+            modifier = Modifier.size(140.dp)
+        )
+    }
+}
+
+@Composable
+fun LogoutButton(
+    customFont: FontFamily,
+    onLogout: () -> Unit
+) {
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White,
+            contentColor = Color(222, 77, 222)
+        ),
+        onClick = { onLogout() },
+        modifier = Modifier
+            .padding(75.dp, 15.dp)
+            .fillMaxWidth()
+            .shadow(10.dp, shape = RoundedCornerShape(30.dp))
+            .height(45.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.Logout),
+            fontFamily = customFont,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+

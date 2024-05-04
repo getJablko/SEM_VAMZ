@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,21 +39,11 @@ fun StorageContent(onHome: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row() {
-            IconButton(
-                onClick = { onHome() },
-                modifier = Modifier
-                    .size(100.dp)
-                    .padding(12.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.home),
-                    contentDescription = (stringResource(R.string.icon)),
-                    modifier = Modifier.size(55.dp)
-                )
-            }
-        }
+        HomeButton2(
+            onHome = onHome
+        )
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,24 +51,48 @@ fun StorageContent(onHome: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(130.dp))
+        Spacer(modifier = Modifier.height(100.dp))
 
-        Box(
-            modifier = Modifier.shadow(75.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.storage),
-                fontFamily = customFont,
-                color = Color.White,
-                fontSize = 42.sp,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    lineHeight = 42.sp,
-                )
+        Text2(
+            customFont = customFont
+        )
+    }
+}
+
+@Composable
+fun HomeButton2(
+    onHome: () -> Unit
+) {
+    IconButton(
+        onClick = { onHome() },
+        modifier = Modifier
+            .size(100.dp)
+            .padding(12.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.home),
+            contentDescription = (stringResource(R.string.icon)),
+            modifier = Modifier.size(55.dp)
+        )
+    }
+}
+
+@Composable
+fun Text2(
+    customFont: FontFamily
+) {
+    Box(
+        modifier = Modifier.shadow(75.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.storage),
+            fontFamily = customFont,
+            color = Color.White,
+            fontSize = 42.sp,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                lineHeight = 42.sp,
             )
-        }
-
-
-
+        )
     }
 }
