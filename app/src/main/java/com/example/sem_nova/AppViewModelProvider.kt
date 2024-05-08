@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.sem_nova.GUI.OrderViewModel
 import com.example.sem_nova.GUI.StorageViewModel
 
 /**
@@ -14,6 +15,12 @@ object AppViewModelProvider {
         // Initializer for StorageViewModel
         initializer {
             StorageViewModel(
+                inventoryApplication().container.dataRepository
+            )
+        }
+        // Initializer for OrderViewModel
+        initializer<OrderViewModel> {
+            OrderViewModel(
                 inventoryApplication().container.dataRepository
             )
         }

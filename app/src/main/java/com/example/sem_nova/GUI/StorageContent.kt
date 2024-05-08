@@ -1,5 +1,6 @@
 package com.example.sem_nova.GUI
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -43,6 +46,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -51,6 +55,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -72,12 +77,22 @@ fun StorageContent(
 ) {
     val customFont = LocalCustomFont.current
     val homeUiState by viewModel.storageUiState.collectAsState()
+    val configuration = LocalConfiguration.current
+    val orientation = configuration.orientation
+    val spacerList = remember {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            listOf(80.dp, 15.dp,25.dp) // Heights for portrait orientation
+        } else {
+            listOf(30.dp, 15.dp, 25.dp) // Heights for landscape orientation
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         HomeButton2(
-            onHome = onHome
+            onHome = onHome,
+            spacerList = spacerList
         )
     }
 
@@ -88,11 +103,12 @@ fun StorageContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(spacerList[0]))
 
         Text2(
             customFont = customFont
         )
+        Spacer(modifier = Modifier.height(spacerList[2]))
 
         Scaffold(
             floatingActionButton = {
@@ -216,9 +232,10 @@ fun InventoryItem(
 
 @Composable
 fun HomeButton2(
-    onHome: () -> Unit
+    onHome: () -> Unit,
+    spacerList: List<Dp>
 ) {
-    Spacer(modifier = Modifier.height(25.dp))
+    Spacer(modifier = Modifier.height(spacerList[1]))
     IconButton(
         onClick = { onHome() },
         modifier = Modifier

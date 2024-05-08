@@ -21,6 +21,9 @@
     <string name="no_item_description">Oops!\nNo items in the inventory. Create a new order and wait for it to arrive!.</string>
     <string name="in_stock">%d in stock</string>
     <string name="item_entry_title">Add Item</string>
+    <string name="number_of_items">Number of items: </string>
+    <string name="no_order_description">Oops!\nNo orders on the way. Create a new order and wait for it to arrive!.</string>
+
 
 
 </resources>
