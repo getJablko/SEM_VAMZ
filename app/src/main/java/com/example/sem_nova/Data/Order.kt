@@ -9,5 +9,5 @@ data class Order(
     @PrimaryKey(autoGenerate = true)
     val orderId: Int = 0,
     val itemId: Int,
-    val itemQuantity: Int,
+    val itemQuantity: Int
     )

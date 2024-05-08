@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sem_nova.GUI.LoginContent
 import com.example.sem_nova.GUI.MainContent
 import com.example.sem_nova.GUI.OrderContent
-import com.example.sem_nova.GUI.ReciveOrderContent
+import com.example.sem_nova.GUI.ReceiveOrderContent
 import com.example.sem_nova.GUI.StorageContent
 import com.example.sem_nova.ui.theme.SEM_NOVATheme
 
@@ -96,7 +96,7 @@ fun ReciveOrderScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    ReciveOrderContent(
+    ReceiveOrderContent(
         onHome = { navController.navigate("main") }
     )
 }

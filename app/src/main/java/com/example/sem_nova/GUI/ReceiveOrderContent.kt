@@ -1,9 +1,6 @@
 package com.example.sem_nova.GUI
 
 import android.content.Intent
-import android.content.pm.LauncherActivityInfo
-import android.content.pm.LauncherApps
-import android.graphics.Camera
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -11,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,10 +43,15 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
+import com.example.sem_nova.Navigation.NavigationDestination
 
+
+object ReceiveOrderDestination : NavigationDestination {
+    override val route = "receive_order"
+}
 
 @Composable
-fun ReciveOrderContent(onHome: () -> Unit) {
+fun ReceiveOrderContent(onHome: () -> Unit) {
     val context = LocalContext.current
     val customFont = LocalCustomFont.current
     val focusRequester = remember { FocusRequester() }
@@ -141,6 +142,8 @@ fun ReciveOrderContent(onHome: () -> Unit) {
 fun HomeButton(
     onHome: () -> Unit
 ) {
+    Spacer(modifier = Modifier.height(25.dp))
+
     IconButton(
         onClick = { onHome() },
         modifier = Modifier

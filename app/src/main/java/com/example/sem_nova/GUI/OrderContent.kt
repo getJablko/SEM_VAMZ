@@ -37,8 +37,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
+
+object OrderDestination : NavigationDestination {
+    override val route = "order"
+}
 
 @Composable
 fun OrderContent(onHome: () -> Unit) {
@@ -179,6 +184,7 @@ fun OrderContent(onHome: () -> Unit) {
 fun HomeButton1(
     onHome: () -> Unit
 ) {
+    Spacer(modifier = Modifier.height(25.dp))
     IconButton(
         onClick = { onHome() },
         modifier = Modifier

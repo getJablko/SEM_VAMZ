@@ -18,4 +18,9 @@
     <string name="storage">Storage</string>
     <string name="correctLogin">admin</string>
     <string name="wrongLogin">Wrong data</string>
+    <string name="no_item_description">Oops!\nNo items in the inventory. Create a new order and wait for it to arrive!.</string>
+    <string name="in_stock">%d in stock</string>
+    <string name="item_entry_title">Add Item</string>
+
+
 </resources>

@@ -42,8 +42,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
+
+object LoginDestination : NavigationDestination {
+    override val route = "login"
+}
 
 @Composable
 fun LoginContent(onLoginSuccess: () -> Unit) {
