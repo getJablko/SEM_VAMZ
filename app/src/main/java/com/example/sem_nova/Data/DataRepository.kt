@@ -14,12 +14,12 @@ interface DataRepository {
     /**
      * Retrieve an item from the given data source that matches with the [id].
      */
-    fun getItemStream(id: Int): Flow<Item?>
+    fun getItemStream(name: String): Flow<Item?>
     fun getOrderStream(id: Int): Flow<Order?>
     /**
      * Insert item in the data source
      */
-    suspend fun insertItem(item: Item)
+    suspend fun upsertItem(item: Item)
 
     suspend fun insertOrder(order: Order)
 
@@ -32,6 +32,5 @@ interface DataRepository {
     /**
      * Update item in the data source
      */
-    suspend fun updateItem(item: Item)
     suspend fun updateOrder(order: Order)
 }

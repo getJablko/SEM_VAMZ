@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -95,35 +96,30 @@ fun OrderContent(
     val orientation = configuration.orientation
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            listOf(80.dp, 20.dp, 25.dp) // Heights for portrait orientation
+            listOf(20.dp, 35.dp) // Heights for portrait orientation
         } else {
-            listOf(30.dp, 20.dp, 25.dp) // Heights for landscape orientation
+            listOf(20.dp, 35.dp) // Heights for landscape orientation
         }
     }
     val orderUiState by viewModel.orderUiState.collectAsState()
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Spacer(modifier = Modifier.height(spacerList[2]))
-        HomeButton1(
-            onHome = onHome
-        )
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Spacer(modifier = Modifier.height(spacerList[0]))
-        Text1(
-            customFont = customFont
-        )
+    Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[1]))
-        /*
+        HomeButton1(onHome = onHome)
+
+        Column(
+            modifier = Modifier
+                .weight(1f) // This makes this column take up all available space after the button
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Text1(
+                customFont = customFont
+            )
+            Spacer(modifier = Modifier.height(spacerList[0]))
+            /*
                 TextField(
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White,
@@ -225,33 +221,32 @@ fun OrderContent(
 
          */
 
-        Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {/* TODO*/ },
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier
-                        .padding(
-                            end = WindowInsets.safeDrawing.asPaddingValues()
-                                .calculateEndPadding(LocalLayoutDirection.current)
+            Scaffold(
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {/* TODO*/ },
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier
+                            .padding(
+                                end = WindowInsets.safeDrawing.asPaddingValues()
+                                    .calculateEndPadding(LocalLayoutDirection.current)
+                            )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(R.string.item_entry_title)
                         )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.item_entry_title)
-                    )
-                }
-            },
-        ) { innerPadding ->
-            OrderBody(
-                orderList = orderUiState.orderList,
-                onItemClick = { /* TODO */ },
-                modifier = Modifier.padding(8.dp),
-                contentPadding = innerPadding
-            )
+                    }
+                },
+            ) { innerPadding ->
+                OrderBody(
+                    orderList = orderUiState.orderList,
+                    onItemClick = { /* TODO */ },
+                    modifier = Modifier.padding(8.dp),
+                    contentPadding = innerPadding
+                )
+            }
         }
-
-
     }
 }
 
@@ -265,8 +260,9 @@ fun OrderBody(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
-    ) {
+        modifier = modifier.fillMaxWidth(),
+
+        ) {
         if (orderList.isEmpty()) {
             Text(
                 text = stringResource(R.string.no_order_description),
@@ -318,6 +314,7 @@ fun InventoryOrder(
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        //colors = CardDefaults.cardColors(containerColor = Color(236, 207, 253))
         //onClick = onItemClick
     ) {
         Column(

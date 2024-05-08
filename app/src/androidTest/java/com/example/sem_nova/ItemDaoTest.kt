@@ -38,8 +38,8 @@ class ItemDaoTest {
 
     private lateinit var itemDao: ItemDao
     private lateinit var inventoryDatabase: InventoryDatabase
-    private val item1 = Item(1, "Apples", 10.0, 20,"A",2.0)
-    private val item2 = Item(2, "Bananas", 15.0, 97,"B", 1.0)
+    private val item1 = Item( "Apples", 10.0, 20,"A",2.0)
+    private val item2 = Item( "Bananas", 15.0, 97,"B", 1.0)
 
     @Before
     fun createDb() {
@@ -81,7 +81,7 @@ class ItemDaoTest {
     @Throws(Exception::class)
     fun daoGetItem_returnsItemFromDB() = runBlocking {
         addOneItemToDb()
-        val item = itemDao.getItem(1)
+        val item = itemDao.getItem("Apples")
         assertEquals(item.first(), item1)
     }
 
@@ -99,20 +99,20 @@ class ItemDaoTest {
     @Throws(Exception::class)
     fun daoUpdateItems_updatesItemsInDB() = runBlocking {
         addTwoItemsToDb()
-        itemDao.update(Item(1, "Apples", 15.0, 25,"C",3.0))
-        itemDao.update(Item(2, "Bananas", 5.0, 50,"D",4.0))
+        itemDao.upsert(Item("Apples", 15.0, 25,"C",3.0))
+        itemDao.upsert(Item("Bananas", 5.0, 50,"D",4.0))
 
         val allItems = itemDao.getAllItems().first()
-        assertEquals(allItems[0], Item(1, "Apples", 15.0, 25,"C",3.0))
-        assertEquals(allItems[1], Item(2, "Bananas", 5.0, 50,"D",4.0))
+        assertEquals(allItems[0], Item("Apples", 15.0, 25,"C",3.0))
+        assertEquals(allItems[1], Item("Bananas", 5.0, 50,"D",4.0))
     }
 
     private suspend fun addOneItemToDb() {
-        itemDao.insert(item1)
+        itemDao.upsert(item1)
     }
 
     private suspend fun addTwoItemsToDb() {
-        itemDao.insert(item1)
-        itemDao.insert(item2)
+        itemDao.upsert(item1)
+        itemDao.upsert(item2)
     }
 }

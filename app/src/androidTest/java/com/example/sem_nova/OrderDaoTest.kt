@@ -24,10 +24,10 @@ class OrderDaoTest {
     private lateinit var orderDao: OrderDao
     private lateinit var itemDao: ItemDao
     private lateinit var inventoryDatabase: InventoryDatabase
-    private val order1 = Order(1,1,1)
-    private val order2 = Order(2, 2,2)
-    private val item1 = Item(1, "Apples", 10.0, 20, "A", 2.0)
-    private val item2 = Item(2, "Bananas", 15.0, 97, "B", 1.0)
+    private val order1 = Order(1,"Apples",1)
+    private val order2 = Order(2, "Bananas",2)
+    private val item1 = Item("Apples", 10.0, 20, "A", 2.0)
+    private val item2 = Item("Bananas", 15.0, 97, "B", 1.0)
 
     @Before
     fun createDb() {
@@ -40,8 +40,8 @@ class OrderDaoTest {
 
         // Insert dummy items into the Item table before inserting orders
         runBlocking {
-            itemDao.insert(item1)
-            itemDao.insert(item2)
+            itemDao.upsert(item1)
+            itemDao.upsert(item2)
         }
     }
 
@@ -91,12 +91,12 @@ class OrderDaoTest {
     @Throws(Exception::class)
     fun daoUpdateItems_updatesItemsInDB() = runBlocking {
         addTwoItemsToDb()
-        orderDao.update(Order(1, 1,10))
-        orderDao.update(Order(2, 1,20))
+        orderDao.update(Order(1, "Apples",10))
+        orderDao.update(Order(2, "Apples",20))
 
         val allItems = orderDao.getAllItems().first()
-        Assert.assertEquals(allItems[0], Order(1, 1,10))
-        Assert.assertEquals(allItems[1], Order(2, 1,20))
+        Assert.assertEquals(allItems[0], Order(1, "Apples",10))
+        Assert.assertEquals(allItems[1], Order(2, "Apples",20))
     }
 
     private suspend fun addOneItemToDb() {

@@ -10,6 +10,7 @@
     <string name="Logout">Logout</string>
     <string name="receiveOrder">Confirm order</string>
     <string name="receivedOrderNumberOrder">Received order number:</string>
+    <string name="receiveOrderText">Receive order</string>
     <string name="newOrder">New order:</string>
     <string name="productName">Product name</string>
     <string name="productQuantity">Product quantity</string>

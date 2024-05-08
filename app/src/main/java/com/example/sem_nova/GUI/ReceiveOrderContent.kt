@@ -1,6 +1,7 @@
 package com.example.sem_nova.GUI
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
@@ -33,6 +36,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.H
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -61,80 +66,87 @@ fun ReceiveOrderContent(onHome: () -> Unit) {
     }
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* handle result if needed */ }
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        HomeButton(
-            onHome = onHome
-        )
+    val configuration = LocalConfiguration.current
+    val orientation = configuration.orientation
+    val spacerList = remember {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            listOf(35.dp, 20.dp, 40.dp, 20.dp, 10.dp) // Heights for portrait orientation
+        } else {
+            listOf(35.dp, 10.dp, 40.dp, 20.dp, 10.dp) // Heights for landscape orientation
+        }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Spacer(modifier = Modifier.height(spacerList[0]))
+        HomeButton(onHome = onHome)
 
-        Spacer(modifier = Modifier.height(130.dp))
-
-        Text(customFont = customFont)
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        TextField(
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            singleLine = true,
-            value = RecivedOrderNumberText,
-            onValueChange = { newText ->
-                RecivedOrderNumberText = newText
-            },
-            placeholder = {
-                Text(stringResource(id = R.string._hint))
-            },
-            textStyle = TextStyle(
-                fontFamily = customFont,
-                fontSize = 16.sp
-            ),
+        Column(
             modifier = Modifier
-                .padding(30.dp, 15.dp)
-                .fillMaxWidth()
-                .focusRequester(focusRequester)
-                .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                .onFocusChanged { focusState ->
-                    isTextFieldFocused = focusState.isFocused
-                    if (focusState.isFocused && !RecivedOrderNumberText.isEmpty() && RecivedOrderNumberText == context.getString(
-                            R.string.receivedOrderNumberOrder
-                        )
-                    ) {
-                        RecivedOrderNumberText = context.getString(R.string._hint)
-                    } else if (focusState.isFocused && !RecivedOrderNumberText.isEmpty() && RecivedOrderNumberText != context.getString(
-                            R.string.receivedOrderNumberOrder
-                        )
-                    ) {
-                        // do nothing
-                    } else if (!focusState.isFocused && RecivedOrderNumberText.isEmpty()) {
-                        RecivedOrderNumberText =
-                            context.getString(R.string.receivedOrderNumberOrder)
-                    }
-                },
-            shape = RoundedCornerShape(30.dp)
-        )
+                .weight(1f) // This makes this column take up all available space after the button
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        Spacer(modifier = Modifier.height(20.dp))
-        ReceivedOrderButton(
-            customFont = customFont
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        ScanButton(
-            cameraLauncher = cameraLauncher
-        )
+            Spacer(modifier = Modifier.height(spacerList[1]))
+
+            Text(customFont = customFont)
+
+            Spacer(modifier = Modifier.height(spacerList[2]))
+
+            TextField(
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                singleLine = true,
+                value = RecivedOrderNumberText,
+                onValueChange = { newText ->
+                    RecivedOrderNumberText = newText
+                },
+                placeholder = {
+                    Text(stringResource(id = R.string._hint))
+                },
+                textStyle = TextStyle(
+                    fontFamily = customFont,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .padding(30.dp, 15.dp)
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .shadow(10.dp, shape = RoundedCornerShape(30.dp))
+                    .onFocusChanged { focusState ->
+                        isTextFieldFocused = focusState.isFocused
+                        if (focusState.isFocused && !RecivedOrderNumberText.isEmpty() && RecivedOrderNumberText == context.getString(
+                                R.string.receivedOrderNumberOrder
+                            )
+                        ) {
+                            RecivedOrderNumberText = context.getString(R.string._hint)
+                        } else if (focusState.isFocused && !RecivedOrderNumberText.isEmpty() && RecivedOrderNumberText != context.getString(
+                                R.string.receivedOrderNumberOrder
+                            )
+                        ) {
+                            // do nothing
+                        } else if (!focusState.isFocused && RecivedOrderNumberText.isEmpty()) {
+                            RecivedOrderNumberText =
+                                context.getString(R.string.receivedOrderNumberOrder)
+                        }
+                    },
+                shape = RoundedCornerShape(30.dp)
+            )
+
+            Spacer(modifier = Modifier.height(spacerList[3]))
+            ReceivedOrderButton(
+                customFont = customFont
+            )
+            Spacer(modifier = Modifier.height(spacerList[4]))
+            ScanButton(
+                cameraLauncher = cameraLauncher
+            )
+        }
     }
 }
 
@@ -142,8 +154,6 @@ fun ReceiveOrderContent(onHome: () -> Unit) {
 fun HomeButton(
     onHome: () -> Unit
 ) {
-    Spacer(modifier = Modifier.height(25.dp))
-
     IconButton(
         onClick = { onHome() },
         modifier = Modifier
@@ -164,7 +174,7 @@ fun Text(customFont: FontFamily) {
         modifier = Modifier.shadow(75.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.welcomeBack_hint),
+            text = stringResource(id = R.string.receiveOrderText),
             fontFamily = customFont,
             color = Color.White,
             fontSize = 42.sp,
@@ -186,7 +196,7 @@ fun ReceivedOrderButton(
             containerColor = Color.White,
             contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
         ),
-        onClick = {/* TODO */},
+        onClick = {/* TODO */ },
         modifier = Modifier
             .padding(46.dp, 15.dp)
             .fillMaxWidth()

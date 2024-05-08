@@ -81,59 +81,55 @@ fun StorageContent(
     val orientation = configuration.orientation
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            listOf(80.dp, 15.dp,25.dp) // Heights for portrait orientation
+            listOf(35.dp, 25.dp) // Heights for portrait orientation
         } else {
-            listOf(30.dp, 15.dp, 25.dp) // Heights for landscape orientation
+            listOf(35.dp, 25.dp) // Heights for landscape orientation
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        HomeButton2(
-            onHome = onHome,
-            spacerList = spacerList
-        )
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
+    Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
+        HomeButton2(onHome = onHome)
 
-        Text2(
-            customFont = customFont
-        )
-        Spacer(modifier = Modifier.height(spacerList[2]))
+        Column(
+            modifier = Modifier
+                .weight(1f) // This makes this column take up all available space after the button
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {/* TODO*/},
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier
-                        .padding(
-                            end = WindowInsets.safeDrawing.asPaddingValues()
-                                .calculateEndPadding(LocalLayoutDirection.current)
-                        )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(R.string.item_entry_title)
-                    )
-                }
-            },
-        ) {  innerPadding ->
-            StorageBody(
-                itemList = homeUiState.itemList,
-                onItemClick = { /* TODO */ },
-                modifier = Modifier.padding(8.dp),
-                contentPadding = innerPadding
+
+            Text2(
+                customFont = customFont
             )
+            Spacer(modifier = Modifier.height(spacerList[1]))
+
+            Scaffold(
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {/* TODO*/ },
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier
+                            .padding(
+                                end = WindowInsets.safeDrawing.asPaddingValues()
+                                    .calculateEndPadding(LocalLayoutDirection.current)
+                            )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = stringResource(R.string.item_entry_title)
+                        )
+                    }
+                },
+            ) { innerPadding ->
+                StorageBody(
+                    itemList = homeUiState.itemList,
+                    onItemClick = { /* TODO */ },
+                    modifier = Modifier.padding(8.dp),
+                    contentPadding = innerPadding
+                )
+            }
         }
     }
 }
@@ -141,14 +137,14 @@ fun StorageContent(
 @Composable
 fun StorageBody(
     itemList: List<Item>,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
     ) {
         if (itemList.isEmpty()) {
             Text(
@@ -160,7 +156,7 @@ fun StorageBody(
         } else {
             InventoryList(
                 itemList = itemList,
-                onItemClick = { onItemClick(it.itemId) },
+                onItemClick = { onItemClick(it.name) },
                 contentPadding = contentPadding,
                 modifier = Modifier.padding(8.dp)
             )
@@ -180,7 +176,7 @@ fun InventoryList(
         modifier = modifier,
         contentPadding = contentPadding
     ) {
-        items(items = itemList, key = { it.itemId }) { item ->
+        items(items = itemList, key = { it.name }) { item ->
             InventoryItem(
                 item = item,
                 //onItemClick = onItemClick,
@@ -232,10 +228,8 @@ fun InventoryItem(
 
 @Composable
 fun HomeButton2(
-    onHome: () -> Unit,
-    spacerList: List<Dp>
+    onHome: () -> Unit
 ) {
-    Spacer(modifier = Modifier.height(spacerList[1]))
     IconButton(
         onClick = { onHome() },
         modifier = Modifier
