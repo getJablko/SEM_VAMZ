@@ -71,6 +71,7 @@ object OrderDestination : NavigationDestination {
 fun OrderContent(
     onHome: () -> Unit,
     onNewOrder: () -> Unit,
+    onCurrentOrder: () -> Unit,
     viewModel: OrderViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val context = LocalContext.current
@@ -96,7 +97,9 @@ fun OrderContent(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[1]))
-        HomeButton1(onHome = onHome)
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            HomeButton1(onHome = onHome)
+        }
 
         Column(
             modifier = Modifier
@@ -110,107 +113,6 @@ fun OrderContent(
                 customFont = customFont
             )
             Spacer(modifier = Modifier.height(spacerList[0]))
-            /*
-                TextField(
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    singleLine = true,
-                    value = productName,
-                    onValueChange = { newText ->
-                        productName = newText
-                    },
-                    placeholder = {
-                        Text(stringResource(id = R.string._hint))
-                    },
-                    textStyle = TextStyle(
-                        fontFamily = customFont,
-                        fontSize = 16.sp
-                    ),
-                    modifier = Modifier
-                        .padding(30.dp, 15.dp)
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester)
-                        .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                        .onFocusChanged { focusState ->
-                            isTextFieldFocused = focusState.isFocused
-                            if (focusState.isFocused && !productName.isEmpty() && productName == context.getString(
-                                    R.string.productName
-                                )
-                            ) {
-                                productName = context.getString(R.string._hint)
-                            } else if (focusState.isFocused && !productName.isEmpty() && productName != context.getString(
-                                    R.string.productName
-                                )
-                            ) {
-                                // do nothing
-                            } else if (!focusState.isFocused && productName.isEmpty()) {
-                                productName =
-                                    context.getString(R.string.productName)
-                            }
-                        },
-                    shape = RoundedCornerShape(30.dp)
-                )
-
-                TextField(
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    singleLine = true,
-                    value = productQuantity,
-                    onValueChange = { newText ->
-                        productQuantity = newText
-                    },
-                    placeholder = {
-                        Text(stringResource(id = R.string._hint))
-                    },
-                    textStyle = TextStyle(
-                        fontFamily = customFont,
-                        fontSize = 16.sp
-                    ),
-                    modifier = Modifier
-                        .padding(30.dp, 15.dp)
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester)
-                        .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                        .onFocusChanged { focusState ->
-                            isTextFieldFocused = focusState.isFocused
-                            if (focusState.isFocused && !productQuantity.isEmpty() && productQuantity == context.getString(
-                                    R.string.productQuantity
-                                )
-                            ) {
-                                productQuantity = context.getString(R.string._hint)
-                            } else if (focusState.isFocused && !productQuantity.isEmpty() && productQuantity != context.getString(
-                                    R.string.productQuantity
-                                )
-                            ) {
-                                // do nothing
-                            } else if (!focusState.isFocused && productQuantity.isEmpty()) {
-                                productQuantity =
-                                    context.getString(R.string.productQuantity)
-                            }
-                        },
-                    shape = RoundedCornerShape(30.dp)
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-                FinalPriceText(
-                    customFont = customFont
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                CreateOrderButton(
-                    customFont = customFont
-                )
-
-         */
 
             Scaffold(
 
@@ -233,7 +135,7 @@ fun OrderContent(
             ) { innerPadding ->
                 OrderBody(
                     orderList = orderUiState.orderList,
-                    onItemClick = { /* TODO */ },
+                    onItemClick = { onCurrentOrder() },
                     //modifier = Modifier.padding(8.dp),
                     contentPadding = innerPadding
                 )

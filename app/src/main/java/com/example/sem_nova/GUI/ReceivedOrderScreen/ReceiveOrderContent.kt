@@ -76,8 +76,9 @@ fun ReceiveOrderContent(onHome: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
-        HomeButton(onHome = onHome)
-
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            HomeButton(onHome = onHome)
+        }
         Column(
             modifier = Modifier
                 .weight(1f) // This makes this column take up all available space after the button

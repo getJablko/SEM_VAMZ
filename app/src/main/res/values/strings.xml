@@ -25,12 +25,12 @@
     <string name="number_of_items">Number of items: %1$d</string>
     <string name="order_ID">Order ID: %1$d</string>
     <string name="no_order_description">Oops!\nNo orders on the way. Create a new order and wait for it to arrive!.</string>
-    <string name="new_name">name</string>
-    <string name="new_price">price per item</string>
-    <string name="new_quantity">quantity</string>
-    <string name="new_place">place</string>
-    <string name="new_weigth">weigth per item</string>
-    <string name="order_detail">order detail</string>
+    <string name="new_name">name*</string>
+    <string name="new_price">price per item*</string>
+    <string name="new_quantity">quantity*</string>
+    <string name="new_place">place*</string>
+    <string name="new_weigth">weigth per item*</string>
+    <string name="order_detail">order detail: %1$d</string>
     <string name="required_fields">*required fields</string>
 
 </resources>

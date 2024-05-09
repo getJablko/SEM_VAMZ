@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -89,8 +91,9 @@ fun NewOrderContent(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
-        HomeButton3(onHome = onHome)
-
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            HomeButton3(onHome = onHome)
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -341,6 +344,7 @@ fun ItemEntryBody(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val customFont = LocalCustomFont.current
     Column(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -353,12 +357,26 @@ fun ItemEntryBody(
             modifier = Modifier.fillMaxWidth()
         )
         Button(
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color(
+                    222,
+                    77,
+                    222
+                )
+            ),
             onClick = onSaveClick,
             enabled = itemUiState.isEntryValid,
             shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(6.dp, shape = RoundedCornerShape(30.dp))
         ) {
-            androidx.compose.material3.Text(text = stringResource(R.string.receiveOrder))
+            androidx.compose.material3.Text(
+                fontFamily = customFont,
+                fontSize = 20.sp,
+                text = stringResource(R.string.receiveOrder)
+            )
         }
     }
 }
@@ -372,6 +390,7 @@ fun ItemInputForm(
     onOrderValueChange: (OrderDetails) -> Unit = {},
     enabled: Boolean = true
 ) {
+    val customFont = LocalCustomFont.current
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -382,8 +401,18 @@ fun ItemInputForm(
                 onValueChange(itemDetails.copy(name = it))
                 onOrderValueChange(orderDetails.copy(itemName = it))
             },
+            textStyle = TextStyle(
+                fontFamily = customFont, // Zmena fontu podľa stavu
+            ),
 
-            label = { androidx.compose.material3.Text(stringResource(R.string.new_name)) },
+            label = {
+                androidx.compose.material3.Text(
+                    text = stringResource(R.string.new_name),
+                    style = TextStyle(
+                        fontFamily = customFont, // Change label font
+                    )
+                )
+            },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -397,7 +426,18 @@ fun ItemInputForm(
             value = itemDetails.price,
             onValueChange = { onValueChange(itemDetails.copy(price = it)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { androidx.compose.material3.Text(stringResource(R.string.new_price)) },
+            textStyle = TextStyle(
+                fontFamily = customFont, // Zmena fontu podľa stavu
+            ),
+
+            label = {
+                androidx.compose.material3.Text(
+                    text = stringResource(R.string.new_price),
+                    style = TextStyle(
+                        fontFamily = customFont, // Change label font
+                    )
+                )
+            },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -415,8 +455,18 @@ fun ItemInputForm(
                 onOrderValueChange(orderDetails.copy(itemQuantity = it))
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { androidx.compose.material3.Text(stringResource(R.string.new_quantity)) },
-            colors = OutlinedTextFieldDefaults.colors(
+            textStyle = TextStyle(
+                fontFamily = customFont, // Zmena fontu podľa stavu
+            ),
+
+            label = {
+                androidx.compose.material3.Text(
+                    text = stringResource(R.string.new_quantity),
+                    style = TextStyle(
+                        fontFamily = customFont, // Change label font
+                    )
+                )
+            }, colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -428,8 +478,18 @@ fun ItemInputForm(
         OutlinedTextField(
             value = itemDetails.place,
             onValueChange = { onValueChange(itemDetails.copy(place = it)) },
-            label = { androidx.compose.material3.Text(stringResource(R.string.new_place)) },
-            colors = OutlinedTextFieldDefaults.colors(
+            textStyle = TextStyle(
+                fontFamily = customFont, // Zmena fontu podľa stavu
+            ),
+
+            label = {
+                androidx.compose.material3.Text(
+                    text = stringResource(R.string.new_place),
+                    style = TextStyle(
+                        fontFamily = customFont, // Change label font
+                    )
+                )
+            }, colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -442,8 +502,18 @@ fun ItemInputForm(
             value = itemDetails.weight,
             onValueChange = { onValueChange(itemDetails.copy(weight = it)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { androidx.compose.material3.Text(stringResource(R.string.new_weigth)) },
-            colors = OutlinedTextFieldDefaults.colors(
+            textStyle = TextStyle(
+                fontFamily = customFont, // Zmena fontu podľa stavu
+            ),
+
+            label = {
+                androidx.compose.material3.Text(
+                    text = stringResource(R.string.new_weigth),
+                    style = TextStyle(
+                        fontFamily = customFont, // Change label font
+                    )
+                )
+            }, colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,

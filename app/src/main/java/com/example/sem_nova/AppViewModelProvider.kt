@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.sem_nova.GUI.NewOrderScreen.NewOrderViewModel
+import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailViewModel
 import com.example.sem_nova.GUI.OrderScreen.OrderViewModel
 import com.example.sem_nova.GUI.StorageScreen.StorageViewModel
 
@@ -28,6 +29,12 @@ object AppViewModelProvider {
         // Initializer for NewOrderViewModel
         initializer<NewOrderViewModel> {
             NewOrderViewModel(
+                inventoryApplication().container.dataRepository
+            )
+        }
+        // Initializer for NewOrderViewModel
+        initializer<OrderDetailViewModel> {
+            OrderDetailViewModel(
                 inventoryApplication().container.dataRepository
             )
         }

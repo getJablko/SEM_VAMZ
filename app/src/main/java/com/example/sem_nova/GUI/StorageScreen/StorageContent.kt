@@ -2,6 +2,7 @@ package com.example.sem_nova.GUI.StorageScreen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -80,12 +82,13 @@ fun StorageContent(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
-        HomeButton2(onHome = onHome)
-
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            HomeButton2(onHome = onHome)
+        }
         Column(
             modifier = Modifier
                 .weight(1f) // This makes this column take up all available space after the button
-                .verticalScroll(rememberScrollState())
+                //.verticalScroll(rememberScrollState())
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -117,7 +120,7 @@ fun StorageContent(
                 StorageBody(
                     itemList = homeUiState.itemList,
                     onItemClick = { /* TODO */ },
-                    modifier = Modifier.padding(8.dp),
+                    //modifier = Modifier.padding(8.dp),
                     contentPadding = innerPadding
                 )
             }
@@ -149,7 +152,7 @@ fun StorageBody(
                 itemList = itemList,
                 onItemClick = { onItemClick(it.name) },
                 contentPadding = contentPadding,
-                modifier = Modifier.padding(8.dp)
+                //modifier = Modifier.padding(8.dp)
             )
         }
     }
@@ -164,7 +167,9 @@ fun InventoryList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(233, 210, 237, 255)),
         contentPadding = contentPadding
     ) {
         items(items = itemList, key = { it.name }) { item ->
@@ -189,6 +194,7 @@ fun InventoryItem(
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(226, 207, 253, 255))
         //onClick = onItemClick
     ) {
         Column(

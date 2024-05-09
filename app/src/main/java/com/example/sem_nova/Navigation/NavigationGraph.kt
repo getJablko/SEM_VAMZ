@@ -64,7 +64,8 @@ fun NavigationGraph(
         ) {
             OrderContent(
                 onHome = {navController.navigate(MainDestination.route)},
-                onNewOrder = {navController.navigate(NewOrderDestination.route)}
+                onNewOrder = {navController.navigate(NewOrderDestination.route)},
+                onCurrentOrder = {navController.navigate(OrderDetailDestination.route)},
             )
         }
         composable(
