@@ -9,8 +9,12 @@ import com.example.sem_nova.GUI.LoginContent
 import com.example.sem_nova.GUI.LoginDestination
 import com.example.sem_nova.GUI.MainContent
 import com.example.sem_nova.GUI.MainDestination
+import com.example.sem_nova.GUI.NewOrderContent
+import com.example.sem_nova.GUI.NewOrderDestination
 import com.example.sem_nova.GUI.OrderContent
 import com.example.sem_nova.GUI.OrderDestination
+import com.example.sem_nova.GUI.OrderDetailContent
+import com.example.sem_nova.GUI.OrderDetailDestination
 import com.example.sem_nova.GUI.ReceiveOrderDestination
 import com.example.sem_nova.GUI.ReceiveOrderContent
 import com.example.sem_nova.GUI.StorageContent
@@ -59,7 +63,8 @@ fun NavigationGraph(
             route = OrderDestination.route
         ) {
             OrderContent(
-                onHome = {navController.navigate(MainDestination.route)}
+                onHome = {navController.navigate(MainDestination.route)},
+                onNewOrder = {navController.navigate(NewOrderDestination.route)}
             )
         }
         composable(
@@ -74,6 +79,21 @@ fun NavigationGraph(
         ) {
             StorageContent(
                 onHome = {navController.navigate(MainDestination.route)}
+            )
+        }
+        composable(
+            route = NewOrderDestination.route
+        ) {
+            NewOrderContent(
+                onHome = { navController.navigate(OrderDestination.route) }
+            )
+        }
+
+        composable(
+            route = OrderDetailDestination.route
+        ) {
+            OrderDetailContent(
+                onHome = { navController.navigate(OrderDestination.route) }
             )
         }
 

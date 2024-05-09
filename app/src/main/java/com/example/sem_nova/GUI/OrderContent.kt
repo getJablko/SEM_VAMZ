@@ -3,6 +3,7 @@ package com.example.sem_nova.GUI
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -80,6 +82,7 @@ object OrderDestination : NavigationDestination {
 @Composable
 fun OrderContent(
     onHome: () -> Unit,
+    onNewOrder: () -> Unit,
     viewModel: OrderViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val context = LocalContext.current
@@ -110,7 +113,7 @@ fun OrderContent(
         Column(
             modifier = Modifier
                 .weight(1f) // This makes this column take up all available space after the button
-                .verticalScroll(rememberScrollState())
+                //.verticalScroll(rememberScrollState())
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -222,9 +225,10 @@ fun OrderContent(
          */
 
             Scaffold(
+
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = {/* TODO*/ },
+                        onClick = { onNewOrder() },
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier
                             .padding(
@@ -242,7 +246,7 @@ fun OrderContent(
                 OrderBody(
                     orderList = orderUiState.orderList,
                     onItemClick = { /* TODO */ },
-                    modifier = Modifier.padding(8.dp),
+                    //modifier = Modifier.padding(8.dp),
                     contentPadding = innerPadding
                 )
             }
@@ -275,7 +279,7 @@ fun OrderBody(
                 orderList = orderList,
                 onItemClick = { onItemClick(it.orderId) },
                 contentPadding = contentPadding,
-                modifier = Modifier.padding(8.dp)
+                //modifier = Modifier.padding(8.dp)
             )
         }
     }
@@ -289,8 +293,10 @@ fun OrderList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier,
-        contentPadding = contentPadding
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(236, 207, 233, 255)),
+        //contentPadding = contentPadding
     ) {
         items(items = orderList, key = { it.orderId }) { order ->
             InventoryOrder(
@@ -314,7 +320,7 @@ fun InventoryOrder(
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        //colors = CardDefaults.cardColors(containerColor = Color(236, 207, 253))
+        colors = CardDefaults.cardColors(containerColor = Color(236, 207, 253, 255))
         //onClick = onItemClick
     ) {
         Column(

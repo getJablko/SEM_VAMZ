@@ -22,7 +22,7 @@ import com.example.sem_nova.GUI.OrderContent
 import com.example.sem_nova.GUI.ReceiveOrderContent
 import com.example.sem_nova.GUI.StorageContent
 import com.example.sem_nova.ui.theme.SEM_NOVATheme
-
+/*
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +110,8 @@ fun OrderScreen(navController: NavController) {
         contentScale = ContentScale.FillBounds
     )
     OrderContent(
-        onHome = { navController.navigate("main") }
+        onHome = { navController.navigate("main") },
+        onNewOrder = {navController.navigate("new_order")}
     )
 }
 
@@ -126,3 +127,4 @@ fun StorageScreen(navController: NavController) {
         onHome = { navController.navigate("main") }
     )
 }
+*/

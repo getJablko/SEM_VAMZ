@@ -22,9 +22,14 @@
     <string name="no_item_description">Oops!\nNo items in the inventory. Create a new order and wait for it to arrive!.</string>
     <string name="in_stock">%d in stock</string>
     <string name="item_entry_title">Add Item</string>
-    <string name="number_of_items">Number of items: </string>
+    <string name="number_of_items">Number of items: %1$d</string>
     <string name="no_order_description">Oops!\nNo orders on the way. Create a new order and wait for it to arrive!.</string>
-
-
+    <string name="new_name">name</string>
+    <string name="new_price">price per item</string>
+    <string name="new_quantity">quantity</string>
+    <string name="new_place">place</string>
+    <string name="new_weigth">weigth per item</string>
+    <string name="order_detail">order detail</string>
+    <string name="required_fields">*required fields</string>
 
 </resources>
