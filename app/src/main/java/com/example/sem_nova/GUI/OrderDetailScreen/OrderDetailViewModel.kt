@@ -1,22 +1,25 @@
-package com.example.sem_nova.GUI
+package com.example.sem_nova.GUI.OrderDetailScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sem_nova.Data.DataRepository
 import com.example.sem_nova.Data.Item
 import com.example.sem_nova.Data.Order
+import com.example.sem_nova.GUI.OrderScreen.OrderUiState
+import com.example.sem_nova.GUI.OrderScreen.OrderViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class OrderViewModel(private val dataRepository: DataRepository) : ViewModel() {
+class OrderDetailViewModel(private val dataRepository: DataRepository) : ViewModel() {
+
 
     val itemUiState: StateFlow<OrderUiState> =
         dataRepository.getAllItemsStream().map { items -> OrderUiState(itemList = items) }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                started = SharingStarted.WhileSubscribed(OrderViewModel.TIMEOUT_MILLIS),
                 initialValue = OrderUiState()
             )
 
@@ -24,17 +27,16 @@ class OrderViewModel(private val dataRepository: DataRepository) : ViewModel() {
         dataRepository.getAllOrdersStream().map { orders -> OrderUiState(orderList = orders) }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                started = SharingStarted.WhileSubscribed(OrderViewModel.TIMEOUT_MILLIS),
                 initialValue = OrderUiState()
             )
 
-
     companion object {
-        const val TIMEOUT_MILLIS = 5_000L
+        private const val TIMEOUT_MILLIS = 5_000L
     }
 }
 
-data class OrderUiState(
+data class OrderDetailUiState(
     val itemList: List<Item> = listOf(),
     val orderList: List<Order> = listOf()
 )

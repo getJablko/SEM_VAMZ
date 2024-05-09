@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.sem_nova.GUI.NewOrderViewModel
-import com.example.sem_nova.GUI.OrderViewModel
-import com.example.sem_nova.GUI.StorageViewModel
+import com.example.sem_nova.GUI.NewOrderScreen.NewOrderViewModel
+import com.example.sem_nova.GUI.OrderScreen.OrderViewModel
+import com.example.sem_nova.GUI.StorageScreen.StorageViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the SEM_NOVA app

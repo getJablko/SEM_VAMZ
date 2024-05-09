@@ -1,27 +1,5 @@
 package com.example.sem_nova
 
-import android.content.pm.ActivityInfo
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.sem_nova.GUI.LoginContent
-import com.example.sem_nova.GUI.MainContent
-import com.example.sem_nova.GUI.OrderContent
-import com.example.sem_nova.GUI.ReceiveOrderContent
-import com.example.sem_nova.GUI.StorageContent
-import com.example.sem_nova.ui.theme.SEM_NOVATheme
 /*
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

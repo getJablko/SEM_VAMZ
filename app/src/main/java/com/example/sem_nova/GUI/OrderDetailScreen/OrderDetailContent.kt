@@ -1,4 +1,4 @@
-package com.example.sem_nova.GUI
+package com.example.sem_nova.GUI.OrderDetailScreen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image

@@ -9,16 +9,16 @@ import com.example.sem_nova.GUI.LoginContent
 import com.example.sem_nova.GUI.LoginDestination
 import com.example.sem_nova.GUI.MainContent
 import com.example.sem_nova.GUI.MainDestination
-import com.example.sem_nova.GUI.NewOrderContent
-import com.example.sem_nova.GUI.NewOrderDestination
-import com.example.sem_nova.GUI.OrderContent
-import com.example.sem_nova.GUI.OrderDestination
-import com.example.sem_nova.GUI.OrderDetailContent
-import com.example.sem_nova.GUI.OrderDetailDestination
-import com.example.sem_nova.GUI.ReceiveOrderDestination
-import com.example.sem_nova.GUI.ReceiveOrderContent
-import com.example.sem_nova.GUI.StorageContent
-import com.example.sem_nova.GUI.StorageDestination
+import com.example.sem_nova.GUI.NewOrderScreen.NewOrderContent
+import com.example.sem_nova.GUI.NewOrderScreen.NewOrderDestination
+import com.example.sem_nova.GUI.OrderScreen.OrderContent
+import com.example.sem_nova.GUI.OrderScreen.OrderDestination
+import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailContent
+import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailDestination
+import com.example.sem_nova.GUI.ReceivedOrderScreen.ReceiveOrderDestination
+import com.example.sem_nova.GUI.ReceivedOrderScreen.ReceiveOrderContent
+import com.example.sem_nova.GUI.StorageScreen.StorageContent
+import com.example.sem_nova.GUI.StorageScreen.StorageDestination
 
 
 @Composable

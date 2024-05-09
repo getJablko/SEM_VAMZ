@@ -1,4 +1,4 @@
-package com.example.sem_nova.GUI
+package com.example.sem_nova.GUI.StorageScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

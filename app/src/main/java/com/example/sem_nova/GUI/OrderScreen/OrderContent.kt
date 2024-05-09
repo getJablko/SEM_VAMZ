@@ -1,6 +1,5 @@
-package com.example.sem_nova.GUI
+package com.example.sem_nova.GUI.OrderScreen
 
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,27 +21,20 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -53,8 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -64,12 +54,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sem_nova.AppViewModelProvider
-import com.example.sem_nova.Data.Item
 import com.example.sem_nova.Data.Order
 import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
@@ -295,8 +283,8 @@ fun OrderList(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(236, 207, 233, 255)),
-        //contentPadding = contentPadding
+        .background(Color(233, 210, 237, 255)),
+        contentPadding = contentPadding
     ) {
         items(items = orderList, key = { it.orderId }) { order ->
             InventoryOrder(
@@ -320,7 +308,7 @@ fun InventoryOrder(
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(236, 207, 253, 255))
+        colors = CardDefaults.cardColors(containerColor = Color(226, 207, 253, 255))
         //onClick = onItemClick
     ) {
         Column(
@@ -332,7 +320,7 @@ fun InventoryOrder(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = order.orderId.toString(),
+                    text = stringResource(R.string.order_ID, order.orderId),
                     style = MaterialTheme.typography.titleLarge,
                 )
             }

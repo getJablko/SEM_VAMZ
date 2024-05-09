@@ -1,4 +1,4 @@
-package com.example.sem_nova.GUI
+package com.example.sem_nova.GUI.OrderScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,14 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class OrderDetailViewModel(private val dataRepository: DataRepository) : ViewModel() {
-
+class OrderViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
     val itemUiState: StateFlow<OrderUiState> =
         dataRepository.getAllItemsStream().map { items -> OrderUiState(itemList = items) }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(OrderViewModel.TIMEOUT_MILLIS),
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = OrderUiState()
             )
 
@@ -25,16 +24,17 @@ class OrderDetailViewModel(private val dataRepository: DataRepository) : ViewMod
         dataRepository.getAllOrdersStream().map { orders -> OrderUiState(orderList = orders) }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(OrderViewModel.TIMEOUT_MILLIS),
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = OrderUiState()
             )
 
+
     companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
+        const val TIMEOUT_MILLIS = 5_000L
     }
 }
 
-data class OrderDetailUiState(
+data class OrderUiState(
     val itemList: List<Item> = listOf(),
     val orderList: List<Order> = listOf()
 )
