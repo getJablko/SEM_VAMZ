@@ -50,14 +50,13 @@ class OrderDetailViewModel(
             )
 
     /**
-     * Reduces the order quantity by one and update the [DataRepository]'s data source.
+     * Mark the order as arrived and update the [DataRepository]'s data source.
      */
-    fun markOrderAsArrived() {
+    fun markOrderAsDeliveredAndUpdateStorage(deliveredOrder: Order) {
         viewModelScope.launch {
-            val currentOrder = uiState.value.orderDetails.toOrder()
-            if (currentOrder.arrived == true) {
-                orderRepository.updateOrder(currentOrder.copy(arrived = true))
-            }
+            orderRepository.updateOrder(deliveredOrder.copy(arrived = true))
+            // Trigger an update of the storage data for the delivered order
+            orderRepository.updateStorage(deliveredOrder)
         }
     }
 

@@ -45,6 +45,7 @@
     <string name="itemName">item name: </string>
     <string name="arrived">arrived: </string>
     <string name="ItemQuantity">item quantity: </string>
+    <string name="unknown_quantity">unknown quantity</string>
 
 
 </resources>

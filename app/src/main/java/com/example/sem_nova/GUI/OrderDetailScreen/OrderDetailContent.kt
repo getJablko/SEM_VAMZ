@@ -86,7 +86,12 @@ fun OrderDetailContent(
     ) { innerPadding ->
         OrderDetailsBody(
             orderDetailsUiState = uiState.value,
-            onSellItem = { viewModel.markOrderAsArrived() },
+            onArrivedOrder = {order ->
+                coroutineScope.launch {
+                    viewModel.markOrderAsDeliveredAndUpdateStorage(order)
+                    onHome()
+                }
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(241, 224, 254))
@@ -105,7 +110,7 @@ fun OrderDetailContent(
 @Composable
 private fun OrderDetailsBody(
     orderDetailsUiState: OrderDetailsUiState,
-    onSellItem: () -> Unit,
+    onArrivedOrder: (Order) -> Unit,
     modifier: Modifier = Modifier,
     customFont: FontFamily
 ) {
@@ -113,7 +118,6 @@ private fun OrderDetailsBody(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
         OrderDetails(
             order = orderDetailsUiState.orderDetails.toOrder(), modifier = Modifier.fillMaxWidth()
         )
@@ -126,7 +130,7 @@ private fun OrderDetailsBody(
                     222
                 )
             ),
-            onClick = onSellItem,
+            onClick = { onArrivedOrder(orderDetailsUiState.orderDetails.toOrder()) },
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(6.dp, shape = RoundedCornerShape(30.dp)),

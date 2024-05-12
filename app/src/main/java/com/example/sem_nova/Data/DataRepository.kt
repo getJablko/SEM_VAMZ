@@ -21,6 +21,7 @@ interface DataRepository {
      */
     suspend fun upsertItem(item: Item)
 
+    suspend fun upsertItem2(item: Item)
     suspend fun insertOrder(order: Order)
 
     /**
@@ -33,4 +34,10 @@ interface DataRepository {
      * Update item in the data source
      */
     suspend fun updateOrder(order: Order)
+
+    /**
+     * Update the storage data after marking an order as delivered.
+     * This method should be called after an order is marked as delivered to ensure the storage screen is updated.
+     */
+    suspend fun updateStorage(deliveredOrder: Order)
 }
