@@ -1,9 +1,11 @@
 package com.example.sem_nova
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.sem_nova.GUI.ItemDetailScreen.ItemDetailViewModel
 import com.example.sem_nova.GUI.NewOrderScreen.NewOrderViewModel
 import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailViewModel
 import com.example.sem_nova.GUI.OrderScreen.OrderViewModel
@@ -35,6 +37,14 @@ object AppViewModelProvider {
         // Initializer for NewOrderViewModel
         initializer<OrderDetailViewModel> {
             OrderDetailViewModel(
+                this.createSavedStateHandle(),
+                inventoryApplication().container.dataRepository
+            )
+        }
+        // Initializer for NewOrderViewModel
+        initializer<ItemDetailViewModel> {
+            ItemDetailViewModel(
+                this.createSavedStateHandle(),
                 inventoryApplication().container.dataRepository
             )
         }

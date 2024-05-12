@@ -2,12 +2,14 @@ package com.example.sem_nova.GUI.NewOrderScreen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -323,6 +326,8 @@ fun NewOrderContent(
                 }
             },
             modifier = Modifier
+                .fillMaxSize()
+                .background(Color(241, 224, 254))
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
                     top = innerPadding.calculateTopPadding(),
@@ -410,17 +415,18 @@ fun ItemInputForm(
                     text = stringResource(R.string.new_name),
                     style = TextStyle(
                         fontFamily = customFont, // Change label font
+                        //color = Color(226, 207, 253)
                     )
                 )
             },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = Color(226, 207, 253),
+                unfocusedContainerColor = Color(226, 207, 253),
+                disabledContainerColor = Color(226, 207, 253),
             ),
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
-            singleLine = true
+            singleLine = true,
         )
         OutlinedTextField(
             value = itemDetails.price,
@@ -439,9 +445,9 @@ fun ItemInputForm(
                 )
             },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = Color(226, 207, 253),
+                unfocusedContainerColor = Color(226, 207, 253),
+                disabledContainerColor = Color(226, 207, 253),
             ),
             leadingIcon = { androidx.compose.material3.Text(Currency.getInstance(Locale.getDefault()).symbol) },
             modifier = Modifier.fillMaxWidth(),
@@ -467,9 +473,9 @@ fun ItemInputForm(
                     )
                 )
             }, colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = Color(226, 207, 253),
+                unfocusedContainerColor = Color(226, 207, 253),
+                disabledContainerColor = Color(226, 207, 253),
             ),
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -490,9 +496,9 @@ fun ItemInputForm(
                     )
                 )
             }, colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = Color(226, 207, 253),
+                unfocusedContainerColor = Color(226, 207, 253),
+                disabledContainerColor = Color(226, 207, 253),
             ),
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
@@ -514,9 +520,9 @@ fun ItemInputForm(
                     )
                 )
             }, colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = Color(226, 207, 253),
+                unfocusedContainerColor = Color(226, 207, 253),
+                disabledContainerColor = Color(226, 207, 253),
             ),
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,

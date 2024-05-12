@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
@@ -65,6 +63,7 @@ object StorageDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StorageContent(
+    navigateToItemUpdate: (String) -> Unit,
     onHome: () -> Unit,
     viewModel: StorageViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
@@ -99,27 +98,10 @@ fun StorageContent(
             )
             Spacer(modifier = Modifier.height(spacerList[1]))
 
-            Scaffold(
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {/* TODO*/ },
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier
-                            .padding(
-                                end = WindowInsets.safeDrawing.asPaddingValues()
-                                    .calculateEndPadding(LocalLayoutDirection.current)
-                            )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = stringResource(R.string.item_entry_title)
-                        )
-                    }
-                },
-            ) { innerPadding ->
+            Scaffold() { innerPadding ->
                 StorageBody(
                     itemList = homeUiState.itemList,
-                    onItemClick = { /* TODO */ },
+                    onItemClick = navigateToItemUpdate,
                     //modifier = Modifier.padding(8.dp),
                     contentPadding = innerPadding
                 )
@@ -135,7 +117,6 @@ fun StorageBody(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth(),
@@ -169,16 +150,15 @@ fun InventoryList(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(233, 210, 237, 255)),
+            .background(Color(241, 224, 254, 255)),
         contentPadding = contentPadding
     ) {
         items(items = itemList, key = { it.name }) { item ->
             InventoryItem(
                 item = item,
-                //onItemClick = onItemClick,
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { onItemClick(item) }
+                    .clickable { onItemClick(item) } // Ensure the clickable modifier also uses the correct function
             )
         }
     }
@@ -188,14 +168,12 @@ fun InventoryList(
 @Composable
 fun InventoryItem(
     item: Item,
-    //onItemClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = Color(226, 207, 253, 255))
-        //onClick = onItemClick
     ) {
         Column(
             modifier = Modifier.padding(20.dp),

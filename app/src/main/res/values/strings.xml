@@ -29,8 +29,22 @@
     <string name="new_price">price per item*</string>
     <string name="new_quantity">quantity*</string>
     <string name="new_place">place*</string>
-    <string name="new_weigth">weigth per item*</string>
+    <string name="new_weigth">weigth per item (kg)*</string>
     <string name="order_detail">order detail: %1$d</string>
     <string name="required_fields">*required fields</string>
+    <string name="delete">Delete</string>
+    <string name="sell">Sell</string>
+    <string name="item">Item</string>
+    <string name="price_per_item">price per item: </string>
+    <string name="storage_place">storage place: </string>
+    <string name="weigth_of_item">weigth of item: </string>
+    <string name="quantity_in_stock">Quantity in stock</string>
+    <string name="kg">kg</string>
+    <string name="mark_as_arrived">Mark as arrived</string>
+    <string name="order_id">order ID: </string>
+    <string name="itemName">item name: </string>
+    <string name="arrived">arrived: </string>
+    <string name="ItemQuantity">item quantity: </string>
+
 
 </resources>

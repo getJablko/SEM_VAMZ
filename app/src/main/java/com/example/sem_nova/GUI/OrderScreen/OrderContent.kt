@@ -71,7 +71,7 @@ object OrderDestination : NavigationDestination {
 fun OrderContent(
     onHome: () -> Unit,
     onNewOrder: () -> Unit,
-    onCurrentOrder: () -> Unit,
+    onCurrentOrder: (Int) -> Unit,
     viewModel: OrderViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val context = LocalContext.current
@@ -135,7 +135,7 @@ fun OrderContent(
             ) { innerPadding ->
                 OrderBody(
                     orderList = orderUiState.orderList,
-                    onItemClick = { onCurrentOrder() },
+                    onOrderClick = onCurrentOrder,
                     //modifier = Modifier.padding(8.dp),
                     contentPadding = innerPadding
                 )
@@ -148,7 +148,7 @@ fun OrderContent(
 @Composable
 fun OrderBody(
     orderList: List<Order>,
-    onItemClick: (Int) -> Unit,
+    onOrderClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -167,7 +167,7 @@ fun OrderBody(
         } else {
             OrderList(
                 orderList = orderList,
-                onItemClick = { onItemClick(it.orderId) },
+                onOrderClick = { onOrderClick(it.orderId) },
                 contentPadding = contentPadding,
                 //modifier = Modifier.padding(8.dp)
             )
@@ -178,14 +178,14 @@ fun OrderBody(
 @Composable
 fun OrderList(
     orderList: List<Order>,
-    onItemClick: (Order) -> Unit,
+    onOrderClick: (Order) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-        .background(Color(233, 210, 237, 255)),
+        .background(Color(241, 224, 254, 255)),
         contentPadding = contentPadding
     ) {
         items(items = orderList, key = { it.orderId }) { order ->
@@ -194,7 +194,7 @@ fun OrderList(
                 //onItemClick = onItemClick,
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { onItemClick(order) }
+                    .clickable { onOrderClick(order) }
             )
         }
     }
@@ -209,7 +209,6 @@ fun InventoryOrder(
 ) {
     Card(
         modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = Color(226, 207, 253, 255))
         //onClick = onItemClick
     ) {

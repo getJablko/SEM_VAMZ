@@ -1,11 +1,8 @@
-package com.example.sem_nova.GUI.OrderDetailScreen
+package com.example.sem_nova.GUI.ItemDetailScreen
 
-import android.content.res.Configuration
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +10,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -24,58 +19,49 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sem_nova.AppViewModelProvider
 import com.example.sem_nova.Data.Item
-import com.example.sem_nova.Data.Order
-import com.example.sem_nova.GUI.ItemDetailScreen.ItemDetailDestination.itemName
-import com.example.sem_nova.GUI.ItemDetailScreen.ItemDetailViewModel
-import com.example.sem_nova.GUI.ItemDetailScreen.ItemDetailsUiState
-import com.example.sem_nova.GUI.NewOrderScreen.OrderDetails
 import com.example.sem_nova.GUI.NewOrderScreen.formatedPrice
 import com.example.sem_nova.GUI.NewOrderScreen.toItem
-import com.example.sem_nova.GUI.NewOrderScreen.toOrder
 import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 import kotlinx.coroutines.launch
 
-
-object OrderDetailDestination : NavigationDestination {
-    override val route = "order_detail"
-    const val orderId = "orderId"
-    val routeWithArgs = "$route/{$orderId}"
+object ItemDetailDestination : NavigationDestination {
+    override val route = "item_details"
+    const val itemName = "name"
+    val routeWithArgs = "$route/{$itemName}"
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderDetailContent(
+fun ItemDetailContent(
+    onDelete: () -> Unit,
     onHome: () -> Unit,
-    viewModel: OrderDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: ItemDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
     val uiState = viewModel.uiState.collectAsState()
@@ -84,9 +70,19 @@ fun OrderDetailContent(
     Scaffold(
         modifier = modifier
     ) { innerPadding ->
-        OrderDetailsBody(
-            orderDetailsUiState = uiState.value,
-            onSellItem = { viewModel.markOrderAsArrived() },
+        ItemDetailsBody(
+            itemDetailsUiState = uiState.value,
+            onSellItem = { viewModel.reduceQuantityByOne() },
+            onDelete = {
+                // Note: If the user rotates the screen very fast, the operation may get cancelled
+                // and the item may not be deleted from the Database. This is because when config
+                // change occurs, the Activity will be recreated and the rememberCoroutineScope will
+                // be cancelled - since the scope is bound to composition.
+                coroutineScope.launch {
+                    viewModel.deleteItem()
+                    onDelete()
+                }
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(241, 224, 254))
@@ -103,9 +99,10 @@ fun OrderDetailContent(
 
 
 @Composable
-private fun OrderDetailsBody(
-    orderDetailsUiState: OrderDetailsUiState,
+private fun ItemDetailsBody(
+    itemDetailsUiState: ItemDetailsUiState,
     onSellItem: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     customFont: FontFamily
 ) {
@@ -114,8 +111,8 @@ private fun OrderDetailsBody(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-        OrderDetails(
-            order = orderDetailsUiState.orderDetails.toOrder(), modifier = Modifier.fillMaxWidth()
+        ItemDetails(
+            item = itemDetailsUiState.itemDetails.toItem(), modifier = Modifier.fillMaxWidth()
         )
         Button(
             colors = ButtonDefaults.buttonColors(
@@ -131,10 +128,10 @@ private fun OrderDetailsBody(
                 .fillMaxWidth()
                 .shadow(6.dp, shape = RoundedCornerShape(30.dp)),
             //shape = MaterialTheme.shapes.small,
-            enabled = !orderDetailsUiState.arrived
+            enabled = !itemDetailsUiState.outOfStock
         ) {
             Text(
-                stringResource(R.string.mark_as_arrived),
+                stringResource(R.string.sell),
                 fontFamily = customFont,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center
@@ -145,8 +142,8 @@ private fun OrderDetailsBody(
 
 
 @Composable
-fun OrderDetails(
-    order: Order, modifier: Modifier = Modifier
+fun ItemDetails(
+    item: Item, modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier,
@@ -159,23 +156,28 @@ fun OrderDetails(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ItemDetailsRow(
-                labelResID = R.string.order_id,
-                orderDetail = order.orderId.toString(),
+                labelResID = R.string.item,
+                itemDetail = item.name,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             ItemDetailsRow(
-                labelResID = R.string.itemName,
-                orderDetail = order.itemName,
+                labelResID = R.string.quantity_in_stock,
+                itemDetail = item.quantity.toString(),
                 modifier = Modifier.padding(16.dp)
             )
             ItemDetailsRow(
-                labelResID = R.string.ItemQuantity,
-                orderDetail = order.itemQuantity.toString(),
+                labelResID = R.string.price_per_item,
+                itemDetail = item.formatedPrice(),
                 modifier = Modifier.padding(16.dp)
             )
             ItemDetailsRow(
-                labelResID = R.string.arrived,
-                orderDetail = order.arrived.toString(),
+                labelResID = R.string.storage_place,
+                itemDetail = item.place,
+                modifier = Modifier.padding(16.dp)
+            )
+            ItemDetailsRow(
+                labelResID = R.string.weigth_of_item,
+                itemDetail = "${item.weight} ${stringResource(R.string.kg)}",
                 modifier = Modifier.padding(16.dp)
             )
         }
@@ -185,7 +187,7 @@ fun OrderDetails(
 
 @Composable
 private fun ItemDetailsRow(
-    @StringRes labelResID: Int, orderDetail: String, modifier: Modifier = Modifier
+    @StringRes labelResID: Int, itemDetail: String, modifier: Modifier = Modifier
 ) {
     val customFont = LocalCustomFont.current
     Row(modifier = modifier) {
@@ -197,17 +199,10 @@ private fun ItemDetailsRow(
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = orderDetail,
+            text = itemDetail,
             fontFamily = customFont,
             fontSize = 16.sp,
             textAlign = TextAlign.Center
         )
     }
 }
-
-
-
-
-
-
-

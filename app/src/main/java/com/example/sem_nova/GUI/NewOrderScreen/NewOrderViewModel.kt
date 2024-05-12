@@ -1,5 +1,7 @@
 package com.example.sem_nova.GUI.NewOrderScreen
 
+import android.health.connect.datatypes.WeightRecord
+import android.health.connect.datatypes.units.Mass
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,6 +10,7 @@ import com.example.sem_nova.Data.DataRepository
 import com.example.sem_nova.Data.Item
 import com.example.sem_nova.Data.Order
 import java.text.NumberFormat
+import java.time.Instant
 
 class NewOrderViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
@@ -87,7 +90,8 @@ data class ItemDetails(
 data class OrderDetails(
     val orderId: Int = 0,
     val itemName: String = "",
-    val itemQuantity: String = ""
+    val itemQuantity: String = "",
+    val arrived: String = ""
 )
 
 /**
@@ -106,7 +110,8 @@ fun ItemDetails.toItem(): Item = Item(
 fun OrderDetails.toOrder(): Order = Order(
     orderId = orderId,
     itemName = itemName,
-    itemQuantity = itemQuantity.toIntOrNull() ?: 0
+    itemQuantity = itemQuantity.toIntOrNull() ?: 0,
+    arrived = false,
 )
 
 fun Item.formatedPrice(): String {
@@ -140,5 +145,6 @@ fun Item.toItemDetails(): ItemDetails = ItemDetails(
 fun Order.toOrderDetails(): OrderDetails = OrderDetails(
     orderId = orderId,
     itemName = itemName,
-    itemQuantity = itemQuantity.toString()
+    itemQuantity = itemQuantity.toString(),
+    arrived = arrived.toString(),
 )

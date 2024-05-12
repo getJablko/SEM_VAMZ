@@ -24,8 +24,8 @@ class OrderDaoTest {
     private lateinit var orderDao: OrderDao
     private lateinit var itemDao: ItemDao
     private lateinit var inventoryDatabase: InventoryDatabase
-    private val order1 = Order(1,"Apples",1)
-    private val order2 = Order(2, "Bananas",2)
+    private val order1 = Order(1,"Apples",1,true)
+    private val order2 = Order(2, "Bananas",2,true)
     private val item1 = Item("Apples", 10.0, 20, "A", 2.0)
     private val item2 = Item("Bananas", 15.0, 97, "B", 1.0)
 
@@ -91,12 +91,12 @@ class OrderDaoTest {
     @Throws(Exception::class)
     fun daoUpdateItems_updatesItemsInDB() = runBlocking {
         addTwoItemsToDb()
-        orderDao.update(Order(1, "Apples",10))
-        orderDao.update(Order(2, "Apples",20))
+        orderDao.update(Order(1, "Apples",10,true))
+        orderDao.update(Order(2, "Apples",20,true))
 
         val allItems = orderDao.getAllItems().first()
-        Assert.assertEquals(allItems[0], Order(1, "Apples",10))
-        Assert.assertEquals(allItems[1], Order(2, "Apples",20))
+        Assert.assertEquals(allItems[0], Order(1, "Apples",10,true))
+        Assert.assertEquals(allItems[1], Order(2, "Apples",20,true))
     }
 
     private suspend fun addOneItemToDb() {
