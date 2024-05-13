@@ -9,6 +9,7 @@ import com.example.sem_nova.GUI.ItemDetailScreen.ItemDetailViewModel
 import com.example.sem_nova.GUI.NewOrderScreen.NewOrderViewModel
 import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailViewModel
 import com.example.sem_nova.GUI.OrderScreen.OrderViewModel
+import com.example.sem_nova.GUI.ReceivedOrderScreen.ReceiveOrderViewModel
 import com.example.sem_nova.GUI.StorageScreen.StorageViewModel
 
 /**
@@ -45,6 +46,12 @@ object AppViewModelProvider {
         initializer<ItemDetailViewModel> {
             ItemDetailViewModel(
                 this.createSavedStateHandle(),
+                inventoryApplication().container.dataRepository
+            )
+        }
+        // Initializer for ReceiveOrderViewModel
+        initializer<ReceiveOrderViewModel> {
+            ReceiveOrderViewModel(
                 inventoryApplication().container.dataRepository
             )
         }

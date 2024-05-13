@@ -32,14 +32,9 @@ class OfflineRepository(
             // Update the quantity of the item
             val updatedQuantity = itemInStorage.quantity + deliveredOrder.itemQuantity
             val storedItem = itemInStorage.copy(quantity = updatedQuantity)
+            //2
             upsertItem2(storedItem)
-        } else {
-            // Handle the case where the item is not found in the storage
-            // This may involve adding the item to the storage or other actions
-            // For simplicity, let's print a message indicating the item was not found
-            println("Item '${deliveredOrder.itemName}' not found in storage.")
         }
-
     }
 
 

@@ -40,4 +40,5 @@ interface DataRepository {
      * This method should be called after an order is marked as delivered to ensure the storage screen is updated.
      */
     suspend fun updateStorage(deliveredOrder: Order)
+
 }

@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +25,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +49,12 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sem_nova.AppViewModelProvider
+import com.example.sem_nova.Data.Order
+import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailViewModel
 import com.example.sem_nova.Navigation.NavigationDestination
+import kotlinx.coroutines.launch
 
 
 object ReceiveOrderDestination : NavigationDestination {
@@ -54,7 +62,10 @@ object ReceiveOrderDestination : NavigationDestination {
 }
 
 @Composable
-fun ReceiveOrderContent(onHome: () -> Unit) {
+fun ReceiveOrderContent(
+    onHome: () -> Unit,
+    viewModel: ReceiveOrderViewModel = viewModel(factory = AppViewModelProvider.Factory),
+) {
     val context = LocalContext.current
     val customFont = LocalCustomFont.current
     val focusRequester = remember { FocusRequester() }
@@ -62,6 +73,8 @@ fun ReceiveOrderContent(onHome: () -> Unit) {
     var RecivedOrderNumberText by remember {
         mutableStateOf(context.getString(R.string.receivedOrderNumberOrder))
     }
+    val uiState = viewModel.orderDetailsUiState.value
+    val coroutineScope = rememberCoroutineScope()
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* handle result if needed */ }
     val configuration = LocalConfiguration.current
@@ -139,7 +152,10 @@ fun ReceiveOrderContent(onHome: () -> Unit) {
 
             Spacer(modifier = Modifier.height(spacerList[3]))
             ReceivedOrderButton(
-                customFont = customFont
+                customFont = customFont,
+                RecivedOrderNumberText = RecivedOrderNumberText,
+                viewModel = viewModel,
+                onHome = onHome,
             )
             Spacer(modifier = Modifier.height(spacerList[4]))
             ScanButton(
@@ -188,14 +204,30 @@ fun Text(customFont: FontFamily) {
 @Composable
 fun ReceivedOrderButton(
     customFont: FontFamily,
+    RecivedOrderNumberText: String,
+    viewModel: ReceiveOrderViewModel,
+    onHome: () -> Unit,
 ) {
     val context = LocalContext.current
+    var buttonColor by remember { mutableStateOf(Color.White) }
     Button(
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White,
+            containerColor = buttonColor,
             contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
         ),
-        onClick = {/* TODO */ },
+        onClick = {
+            viewModel.updateOrderId(RecivedOrderNumberText.toInt())
+            viewModel.isOrderValid(RecivedOrderNumberText.toInt()) { isValid ->
+                if (isValid == false) {
+                   //TODO
+                    buttonColor = Color.Red
+                } else {
+                    buttonColor = Color.White
+                    viewModel.markOrderAsDeliveredAndUpdateStorage(RecivedOrderNumberText.toInt())
+                    onHome()
+                }
+            }
+        },
         modifier = Modifier
             .padding(46.dp, 15.dp)
             .fillMaxWidth()

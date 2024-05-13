@@ -30,11 +30,11 @@ interface ItemDao {
         val existingItem = getItem(item.name).firstOrNull()
         if (existingItem != null) {
             // Item exists, update its quantity
-            val newQuantity = existingItem.quantity
+            val newQuantity = existingItem.quantity - 1
             updateQuantity(item.name, newQuantity,item.price,item.place,item.weight)
         } else {
             // Item doesn't exist, insert it
-            insert(item)
+            insertNew(item)
         }
     }
 
@@ -47,9 +47,21 @@ interface ItemDao {
             updateQuantity(item.name, newQuantity,item.price,item.place,item.weight)
         } else {
             // Item doesn't exist, insert it
-            insert(item)
+            insertNew(item)
         }
     }
+
+    @Insert
+    suspend fun insertNew(item: Item) {
+        // Set quantity to 0 before insertion
+        val itemWithDefaultQuantity = item.copy(quantity = 0)
+        insertInternal(itemWithDefaultQuantity)
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertInternal(item: Item)
+
+
     @Update
     suspend fun update(item: Item)
     @Insert
