@@ -26,7 +26,7 @@ interface ItemDao {
         val existingItem = getItem(item.name).firstOrNull()
         if (existingItem != null) {
             // Item exists, update its quantity
-            val newQuantity = existingItem.quantity - 1
+            val newQuantity = existingItem.quantity //- 1
             updateQuantity(item.name, newQuantity,item.price,item.place,item.weight)
         } else {
             // Item doesn't exist, insert it

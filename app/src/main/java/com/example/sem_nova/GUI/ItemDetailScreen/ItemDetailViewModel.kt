@@ -51,13 +51,6 @@ class ItemDetailViewModel(
         }
     }
 
-    /**
-     * Deletes the item from the [DataRepository]'s data source.
-     */
-    suspend fun deleteItem() {
-        itemsRepository.deleteItem(uiState.value.itemDetails.toItem())
-    }
-
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }

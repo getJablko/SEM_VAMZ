@@ -18,16 +18,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -45,7 +39,6 @@ import com.example.sem_nova.GUI.NewOrderScreen.toItem
 import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
-import kotlinx.coroutines.launch
 
 object ItemDetailDestination : NavigationDestination {
     override val route = "item_details"
@@ -53,11 +46,9 @@ object ItemDetailDestination : NavigationDestination {
     val routeWithArgs = "$route/{$itemName}"
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun ItemDetailContent(
-    onDelete: () -> Unit,
-    onHome: () -> Unit,
     viewModel: ItemDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
