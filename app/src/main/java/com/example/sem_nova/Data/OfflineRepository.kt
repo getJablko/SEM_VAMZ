@@ -20,8 +20,8 @@ class OfflineRepository(
     override suspend fun deleteOrder(order: Order) = orderDao.delete(order)
 
     override suspend fun upsertItem(item: Item) = itemDao.upsert(item)
+    override suspend fun upsertItem2(item: Item, newQuantity: Int) = itemDao.upsert2(item, newQuantity)
 
-    override suspend fun upsertItem2(item: Item) = itemDao.upsert2(item)
     override suspend fun updateOrder(order: Order) = orderDao.update(order)
     override suspend fun updateStorage(deliveredOrder: Order) {
         // Find the item in the storage
@@ -30,10 +30,9 @@ class OfflineRepository(
         // If the item exists in storage
         if (itemInStorage != null) {
             // Update the quantity of the item
-            val updatedQuantity = itemInStorage.quantity + deliveredOrder.itemQuantity
-            val storedItem = itemInStorage.copy(quantity = updatedQuantity)
-            //2
-            upsertItem2(storedItem)
+            val updatedQuantity =  deliveredOrder.itemQuantity
+
+            upsertItem2(itemInStorage, updatedQuantity)
         }
     }
 

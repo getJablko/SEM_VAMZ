@@ -18,7 +18,7 @@
     <string name="createOrder">Create order</string>
     <string name="storage">Storage</string>
     <string name="correctLogin">admin</string>
-    <string name="wrongLogin">Wrong data</string>
+    <string name="wrongLogin">Wrong login or password</string>
     <string name="no_item_description">Oops!\nNo items in the inventory. Create a new order and wait for it to arrive!.</string>
     <string name="in_stock">%d in stock</string>
     <string name="item_entry_title">Add Item</string>
@@ -32,8 +32,8 @@
     <string name="new_weigth">weigth per item (kg)*</string>
     <string name="order_detail">order detail: %1$d</string>
     <string name="required_fields">*required fields</string>
-    <string name="delete">Delete</string>
     <string name="sell">Sell</string>
+    <string name="delete">Delete item</string>
     <string name="item">Item</string>
     <string name="price_per_item">price per item: </string>
     <string name="storage_place">storage place: </string>
@@ -46,6 +46,7 @@
     <string name="arrived">arrived: </string>
     <string name="ItemQuantity">item quantity: </string>
     <string name="unknown_quantity">unknown quantity</string>
+    <string name="Invalid_order_number">"Invalid order number"</string>
 
 
 </resources>

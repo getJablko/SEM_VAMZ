@@ -1,28 +1,16 @@
 package com.example.sem_nova.GUI.ReceivedOrderScreen
 
-import androidx.compose.runtime.Recomposer
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sem_nova.Data.DataRepository
-import com.example.sem_nova.Data.Order
 import com.example.sem_nova.GUI.NewOrderScreen.OrderDetails
 import com.example.sem_nova.GUI.NewOrderScreen.toOrderDetails
-import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailDestination
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-
-import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailDestination.orderId
-import com.example.sem_nova.GUI.OrderScreen.OrderViewModel.Companion.TIMEOUT_MILLIS
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -34,7 +22,6 @@ class ReceiveOrderViewModel(
 
     // UI State to observe order details
     private var _orderDetailsUiState = mutableStateOf(OrderDetailsUiState())
-    val orderDetailsUiState: State<OrderDetailsUiState> = _orderDetailsUiState
 
 
     // Method to update orderId
@@ -67,28 +54,6 @@ class ReceiveOrderViewModel(
         }
     }
 
-
-    /**
-     * Holds the order details ui state. The data is retrieved from [DataRepository] and mapped to
-     * the UI state.
-     */
-    /*
-    val uiState: StateFlow<OrderDetailsUiState> =
-        orderRepository.getOrderStream(orderId)
-            .filterNotNull()
-            .map {
-                OrderDetailsUiState(
-                    arrived = it.arrived,
-                    orderDetails = it.toOrderDetails()
-                )
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = OrderDetailsUiState()
-            )
-
-
-     */
     /**
      * Mark the order as arrived and update the [DataRepository]'s data source.
      */
@@ -111,7 +76,9 @@ class ReceiveOrderViewModel(
 
             if ((deliveredOrder != null && deliveredOrder.arrived == true) || deliveredOrder == null) {
                 callback(false)
-            } else {callback(true)}
+            } else {
+                callback(true)
+            }
         }
     }
 

@@ -1,7 +1,5 @@
 package com.example.sem_nova.GUI.NewOrderScreen
 
-import android.health.connect.datatypes.WeightRecord
-import android.health.connect.datatypes.units.Mass
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,7 +8,6 @@ import com.example.sem_nova.Data.DataRepository
 import com.example.sem_nova.Data.Item
 import com.example.sem_nova.Data.Order
 import java.text.NumberFormat
-import java.time.Instant
 
 class NewOrderViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
@@ -118,18 +115,6 @@ fun Item.formatedPrice(): String {
     return NumberFormat.getCurrencyInstance().format(price)
 }
 
-/**
- * Extension function to convert [Item] to [ItemUiState] and [Order] to [OrderUiState1]
- */
-fun Item.toItemUiState(isEntryValid: Boolean = false): ItemUiState = ItemUiState(
-    itemDetails = this.toItemDetails(),
-    isEntryValid = isEntryValid
-)
-
-fun Order.toOrderUiState1(isEntryValid: Boolean = false): OrderUiState1 = OrderUiState1(
-    orderDetails = this.toOrderDetails(),
-    isEntryValid = isEntryValid
-)
 
 /**
  * Extension function to convert [Item] to [ItemDetails] and [Order] to [OrderDetails]

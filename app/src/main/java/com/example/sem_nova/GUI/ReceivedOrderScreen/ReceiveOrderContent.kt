@@ -3,11 +3,11 @@ package com.example.sem_nova.GUI.ReceivedOrderScreen
 import android.content.Intent
 import android.content.res.Configuration
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,11 +25,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,22 +38,19 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.sem_nova.R
-import com.example.sem_nova.ui.theme.LocalCustomFont
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sem_nova.AppViewModelProvider
-import com.example.sem_nova.Data.Order
-import com.example.sem_nova.GUI.OrderDetailScreen.OrderDetailViewModel
 import com.example.sem_nova.Navigation.NavigationDestination
-import kotlinx.coroutines.launch
+import com.example.sem_nova.R
+import com.example.sem_nova.ui.theme.LocalCustomFont
 
 
 object ReceiveOrderDestination : NavigationDestination {
@@ -70,20 +66,18 @@ fun ReceiveOrderContent(
     val customFont = LocalCustomFont.current
     val focusRequester = remember { FocusRequester() }
     var isTextFieldFocused by remember { mutableStateOf(false) }
-    var RecivedOrderNumberText by remember {
+    var RecivedOrderNumberText by rememberSaveable {
         mutableStateOf(context.getString(R.string.receivedOrderNumberOrder))
     }
-    val uiState = viewModel.orderDetailsUiState.value
-    val coroutineScope = rememberCoroutineScope()
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* handle result if needed */ }
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            listOf(35.dp, 20.dp, 40.dp, 20.dp, 10.dp) // Heights for portrait orientation
+            listOf(35.dp, 20.dp, 40.dp, 20.dp, 10.dp) // portrait orientation
         } else {
-            listOf(35.dp, 10.dp, 40.dp, 20.dp, 10.dp) // Heights for landscape orientation
+            listOf(35.dp, 10.dp, 40.dp, 20.dp, 10.dp) // landscape orientation
         }
     }
 
@@ -102,7 +96,10 @@ fun ReceiveOrderContent(
 
             Spacer(modifier = Modifier.height(spacerList[1]))
 
-            Text(customFont = customFont)
+            TextTitle(
+                customFont = customFont,
+                text = stringResource(id = R.string.receiveOrderText)
+            )
 
             Spacer(modifier = Modifier.height(spacerList[2]))
 
@@ -184,12 +181,15 @@ fun HomeButton(
 }
 
 @Composable
-fun Text(customFont: FontFamily) {
+fun TextTitle(
+    customFont: FontFamily,
+    text: String
+) {
     Box(
         modifier = Modifier.shadow(75.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.receiveOrderText),
+            text = text,
             fontFamily = customFont,
             color = Color.White,
             fontSize = 42.sp,
@@ -216,16 +216,25 @@ fun ReceivedOrderButton(
             contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
         ),
         onClick = {
-            viewModel.updateOrderId(RecivedOrderNumberText.toInt())
-            viewModel.isOrderValid(RecivedOrderNumberText.toInt()) { isValid ->
-                if (isValid == false) {
-                   //TODO
-                    buttonColor = Color.Red
-                } else {
-                    buttonColor = Color.White
-                    viewModel.markOrderAsDeliveredAndUpdateStorage(RecivedOrderNumberText.toInt())
-                    onHome()
+            try {
+                val orderId = RecivedOrderNumberText.toInt()
+                viewModel.updateOrderId(orderId)
+                viewModel.isOrderValid(orderId) { isValid ->
+                    if (isValid == false) {
+                        // Handle the case when the order is not valid
+                        // For example, change button color to red
+                        buttonColor = Color.Red
+                    } else {
+                        // Handle the case when the order is valid
+                        buttonColor = Color.White
+                        viewModel.markOrderAsDeliveredAndUpdateStorage(orderId)
+                        onHome()
+                    }
                 }
+            } catch (e: NumberFormatException) {
+                // ak zadný string nie je cislo
+                buttonColor = Color.Red
+                Toast.makeText(context, R.string.Invalid_order_number, Toast.LENGTH_SHORT).show()
             }
         },
         modifier = Modifier

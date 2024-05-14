@@ -3,7 +3,6 @@ package com.example.sem_nova.GUI
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,11 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sem_nova.GUI.ReceivedOrderScreen.TextTitle
 import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
@@ -53,9 +52,9 @@ fun MainContent(
     val orientation = configuration.orientation
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            listOf(120.dp, 10.dp) // Heights for portrait orientation
+            listOf(120.dp, 10.dp) // portrait orientation
         } else {
-            listOf(10.dp, 10.dp) // Heights for landscape orientation
+            listOf(10.dp, 10.dp) // landscape orientation
         }
     }
 
@@ -66,54 +65,66 @@ fun MainContent(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-        Spacer(modifier = Modifier.height(spacerList[0]))
-        MenuText(
-            customFont = customFont
-        )
-        Spacer(modifier = Modifier.height(spacerList[1]))
+            Spacer(modifier = Modifier.height(spacerList[0]))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ButtonRecieveOrder(
-                onReceiveOrder = onReceiveOrder
+            TextTitle(
+                customFont = customFont,
+                text = stringResource(id = R.string.welcomeBack_hint)
             )
-            ButtonNewOrder(
-                onNewOrder = onNewOrder
+
+            Spacer(modifier = Modifier.height(spacerList[1]))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ButtonRecieveOrder(
+                    onReceiveOrder = onReceiveOrder
+                )
+                ButtonNewOrder(
+                    onNewOrder = onNewOrder
+                )
+            }
+            ButtonStorage(
+                onStorage = onStorage
+            )
+            LogoutButton(
+                customFont = customFont,
+                onLogout = onLogout
+            )
+        } else {
+            Spacer(modifier = Modifier.height(spacerList[0]))
+            TextTitle(
+                customFont = customFont,
+                text = stringResource(id = R.string.welcomeBack_hint)
+            )
+            Spacer(modifier = Modifier.height(spacerList[1]))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ButtonRecieveOrder(
+                    onReceiveOrder = onReceiveOrder
+                )
+                ButtonNewOrder(
+                    onNewOrder = onNewOrder
+                )
+                ButtonStorage(
+                    onStorage = onStorage
+                )
+            }
+            LogoutButton(
+                customFont = customFont,
+                onLogout = onLogout
             )
         }
-        ButtonStorage(
-            onStorage = onStorage
-        )
-        LogoutButton(
-            customFont = customFont,
-            onLogout = onLogout
-        )
-    }
-}
-
-@Composable
-fun MenuText(
-    customFont: FontFamily
-) {
-    Box(
-        modifier = Modifier
-            .shadow(75.dp)
-    ) {
-        Text(
-            text = stringResource(id = R.string.welcomeBack_hint),
-            fontFamily = customFont,
-            color = Color.White,
-            fontSize = 42.sp,
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                lineHeight = 42.sp,
-            )
-        )
     }
 }
 
@@ -125,7 +136,6 @@ fun ButtonRecieveOrder(
         onClick = { onReceiveOrder() },
         modifier = Modifier
             .size(180.dp)
-
     ) {
         Image(
             painter = painterResource(R.drawable.reciveorder),

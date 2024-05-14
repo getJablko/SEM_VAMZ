@@ -1,14 +1,13 @@
 package com.example.sem_nova.GUI
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Box
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -35,13 +34,13 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sem_nova.GUI.ReceivedOrderScreen.TextTitle
 import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
@@ -62,9 +61,9 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
     val orientation = configuration.orientation
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            listOf(155.dp, 50.dp, 16.dp, 90.dp) // Heights for portrait orientation
+            listOf(155.dp, 50.dp, 16.dp, 90.dp) // portrait orientation
         } else {
-            listOf(10.dp, 25.dp, 20.dp, 240.dp) // Heights for landscape orientation
+            listOf(10.dp, 25.dp, 20.dp, 240.dp) // landscape orientation
         }
     }
 
@@ -74,7 +73,12 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
     ) {
-        WelcomeText(customFont = customFont, spacerList = spacerList)
+        Spacer(modifier = Modifier.height(spacerList[0]))
+
+        TextTitle(
+            customFont = customFont,
+            text = stringResource(id = R.string.welcome_hint)
+        )
 
         Spacer(modifier = Modifier.height(spacerList[1]))
 
@@ -94,7 +98,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                 Text(stringResource(id = R.string._hint))
             },
             textStyle = TextStyle(
-                fontFamily = customFont, // Zmena fontu podľa stavu
+                fontFamily = customFont, // Zmena fontu
                 fontSize = 16.sp
             ),
             modifier = Modifier
@@ -177,6 +181,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
             onLoginFailed = { // Callback to handle incorrect login
                 LoginText = context.getString(R.string.wrongLogin)
                 PasswdText = context.getString(R.string._hint)
+                Toast.makeText(context, R.string.wrongLogin, Toast.LENGTH_SHORT).show()
             },
             spacerList = spacerList
         )
@@ -231,34 +236,4 @@ fun LoginButton(
         }
     }
 }
-
-@Composable
-fun WelcomeText(customFont: FontFamily, spacerList: List<Dp>) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-
-        Spacer(modifier = Modifier.height(spacerList[0]))
-
-        Box(
-            modifier = Modifier.shadow(75.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.welcome_hint),
-                fontFamily = customFont,
-                color = Color.White,
-                fontSize = 42.sp,
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    lineHeight = 42.sp,
-                )
-            )
-        }
-    }
-}
-
-
 

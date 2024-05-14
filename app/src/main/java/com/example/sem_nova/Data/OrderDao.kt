@@ -16,8 +16,6 @@ interface OrderDao {
     @Query("SELECT * from orders WHERE OrderId = :id")
     fun getItem(id: Int): Flow<Order>
 
-    // Specify the conflict strategy as IGNORE, when the user tries to add an
-    // existing Item into the database Room ignores the conflict.
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Order)
 

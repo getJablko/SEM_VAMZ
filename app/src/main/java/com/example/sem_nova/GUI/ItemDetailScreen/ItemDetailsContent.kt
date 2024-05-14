@@ -19,8 +19,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,7 +62,6 @@ fun ItemDetailContent(
     modifier: Modifier = Modifier
 ) {
     val uiState = viewModel.uiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
     val customFont = LocalCustomFont.current
     Scaffold(
         modifier = modifier
@@ -73,16 +69,7 @@ fun ItemDetailContent(
         ItemDetailsBody(
             itemDetailsUiState = uiState.value,
             onSellItem = { viewModel.reduceQuantityByOne() },
-            onDelete = {
-                // Note: If the user rotates the screen very fast, the operation may get cancelled
-                // and the item may not be deleted from the Database. This is because when config
-                // change occurs, the Activity will be recreated and the rememberCoroutineScope will
-                // be cancelled - since the scope is bound to composition.
-                coroutineScope.launch {
-                    viewModel.deleteItem()
-                    onDelete()
-                }
-            },
+
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(241, 224, 254))
@@ -102,7 +89,6 @@ fun ItemDetailContent(
 private fun ItemDetailsBody(
     itemDetailsUiState: ItemDetailsUiState,
     onSellItem: () -> Unit,
-    onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     customFont: FontFamily
 ) {
@@ -110,7 +96,6 @@ private fun ItemDetailsBody(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
         ItemDetails(
             item = itemDetailsUiState.itemDetails.toItem(), modifier = Modifier.fillMaxWidth()
         )
@@ -127,7 +112,7 @@ private fun ItemDetailsBody(
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(6.dp, shape = RoundedCornerShape(30.dp)),
-            //shape = MaterialTheme.shapes.small,
+
             enabled = !itemDetailsUiState.outOfStock
         ) {
             Text(

@@ -21,7 +21,7 @@ interface DataRepository {
      */
     suspend fun upsertItem(item: Item)
 
-    suspend fun upsertItem2(item: Item)
+    suspend fun upsertItem2(item: Item, newQuantity: Int)
     suspend fun insertOrder(order: Order)
 
     /**

@@ -1,10 +1,8 @@
 package com.example.sem_nova.GUI.NewOrderScreen
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -13,45 +11,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sem_nova.AppViewModelProvider
+import com.example.sem_nova.GUI.ReceivedOrderScreen.HomeButton
+import com.example.sem_nova.GUI.ReceivedOrderScreen.TextTitle
 import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
@@ -64,38 +51,26 @@ object NewOrderDestination : NavigationDestination {
     override val route = "new_order"
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewOrderContent(
     onHome: () -> Unit,
     viewModel: NewOrderViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val customFont = LocalCustomFont.current
-    //val orderUiState by viewModel.orderUiState.collectAsState()
-    //val itemUiState by viewModel.itemUiState.collectAsState()
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            listOf(35.dp, 25.dp) // Heights for portrait orientation
+            listOf(35.dp, 25.dp) // portrait orientation
         } else {
-            listOf(35.dp, 25.dp) // Heights for landscape orientation
+            listOf(35.dp, 25.dp) // landscape orientation
         }
     }
-    val context = LocalContext.current
-    var name by rememberSaveable { mutableStateOf(context.getString(R.string.new_name)) }
-    var price by rememberSaveable { mutableStateOf(context.getString(R.string.new_price)) }
-    var quantity by rememberSaveable { mutableStateOf(context.getString(R.string.new_quantity)) }
-    var place by rememberSaveable { mutableStateOf(context.getString(R.string.new_place)) }
-    var weigth by rememberSaveable { mutableStateOf(context.getString(R.string.new_weigth)) }
-    val focusRequester = remember { FocusRequester() }
-    var isTextFieldFocused by remember { mutableStateOf(false) }
-
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            HomeButton3(onHome = onHome)
+            HomeButton(onHome = onHome)
         }
         Column(
             modifier = Modifier
@@ -105,8 +80,9 @@ fun NewOrderContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text3(
-                customFont = customFont
+            TextTitle(
+                customFont = customFont,
+                text = stringResource(id = R.string.newOrder)
             )
             Spacer(modifier = Modifier.height(spacerList[1]))
 
@@ -121,10 +97,6 @@ fun NewOrderContent(
             onItemValueChange = viewModel::updateUiState,
             onOrderValueChange = viewModel::updateUiState1,
             onSaveClick = {
-                // Note: If the user rotates the screen very fast, the operation may get cancelled
-                // and the item may not be saved in the Database. This is because when config
-                // change occurs, the Activity will be recreated and the rememberCoroutineScope will
-                // be cancelled - since the scope is bound to composition.
                 coroutineScope.launch {
                     viewModel.saveItem()
                     viewModel.saveOrder()
@@ -221,7 +193,6 @@ fun ItemInputForm(
                     text = stringResource(R.string.new_name),
                     style = TextStyle(
                         fontFamily = customFont, // Change label font
-                        //color = Color(226, 207, 253)
                     )
                 )
             },
@@ -340,44 +311,5 @@ fun ItemInputForm(
                 modifier = Modifier.padding(16.dp)
             )
         }
-    }
-}
-
-
-@Composable
-fun HomeButton3(
-    onHome: () -> Unit
-) {
-    IconButton(
-        onClick = { onHome() },
-        modifier = Modifier
-            .size(100.dp)
-            .padding(12.dp)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.home),
-            contentDescription = (stringResource(R.string.icon)),
-            modifier = Modifier.size(55.dp)
-        )
-    }
-}
-
-@Composable
-fun Text3(
-    customFont: FontFamily
-) {
-    Box(
-        modifier = Modifier.shadow(75.dp)
-    ) {
-        androidx.compose.material3.Text(
-            text = stringResource(id = R.string.newOrder),
-            fontFamily = customFont,
-            color = Color.White,
-            fontSize = 42.sp,
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                lineHeight = 42.sp,
-            )
-        )
     }
 }
