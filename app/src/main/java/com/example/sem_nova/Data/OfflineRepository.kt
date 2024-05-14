@@ -25,6 +25,7 @@ class OfflineRepository(
     override suspend fun deleteOrder(order: Order) = orderDao.delete(order)
 
     override suspend fun upsertItem(item: Item) = itemDao.upsert(item)
+    override suspend fun upsertItem3(item: Item) = itemDao.upsert3(item)
     override suspend fun upsertItem2(item: Item, newQuantity: Int) = itemDao.upsert2(item, newQuantity)
 
     override suspend fun updateOrder(order: Order) = orderDao.update(order)

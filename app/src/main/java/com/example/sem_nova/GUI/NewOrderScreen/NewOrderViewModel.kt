@@ -43,7 +43,7 @@ class NewOrderViewModel(private val dataRepository: DataRepository) : ViewModel(
      */
     suspend fun saveItem() {
         if (validateInput()) {
-            dataRepository.upsertItem(itemUiState.itemDetails.toItem())
+            dataRepository.upsertItem3(itemUiState.itemDetails.toItem())
         }
     }
 

@@ -31,15 +31,14 @@ interface ItemDao {
     )
 
     /**
-     * custom upsert funkcia pre aktualizovanie/vlozenie nedorucenych poloziek na sklad
-     * napr. vytvorenie novej objednavky
+     * custom upsert funkcia pre predavanie poloziek zo skladu
      */
     @Transaction
     suspend fun upsert(item: Item) {
         val existingItem = getItem(item.name).firstOrNull()
         if (existingItem != null) {
             // uprav mnozstvo
-            val newQuantity = existingItem.quantity //- 1
+            val newQuantity = existingItem.quantity - 1
             updateQuantity(item.name, newQuantity, item.price, item.place, item.weight)
         } else {
             // ak neexistuje tak insert
@@ -57,6 +56,23 @@ interface ItemDao {
         if (existingItem != null) {
             // uprav mnozstvo
             val newQuantity = existingItem.quantity + newQuantity
+            updateQuantity(item.name, newQuantity, item.price, item.place, item.weight)
+        } else {
+            // ak neexistuje tak insert
+            insertNew(item)
+        }
+    }
+
+    /**
+     * custom upsert funkcia pre aktualizovanie/vlozenie nedorucenych poloziek na sklad
+     * napr. vytvorenie novej objednavky
+     */
+    @Transaction
+    suspend fun upsert3(item: Item) {
+        val existingItem = getItem(item.name).firstOrNull()
+        if (existingItem != null) {
+            // uprav mnozstvo
+            val newQuantity = existingItem.quantity
             updateQuantity(item.name, newQuantity, item.price, item.place, item.weight)
         } else {
             // ak neexistuje tak insert

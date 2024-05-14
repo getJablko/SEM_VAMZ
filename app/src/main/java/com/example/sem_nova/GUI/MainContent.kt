@@ -64,7 +64,7 @@ fun MainContent(
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(120.dp, 10.dp) // portrait orientation
         } else {
-            listOf(10.dp, 10.dp) // landscape orientation
+            listOf(50.dp, 10.dp) // landscape orientation
         }
     }
 

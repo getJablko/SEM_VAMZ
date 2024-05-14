@@ -73,7 +73,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(155.dp, 50.dp, 16.dp, 90.dp) // portrait orientation
         } else {
-            listOf(10.dp, 25.dp, 20.dp, 240.dp) // landscape orientation
+            listOf(50.dp, 25.dp, 20.dp, 240.dp) // landscape orientation
         }
     }
 
