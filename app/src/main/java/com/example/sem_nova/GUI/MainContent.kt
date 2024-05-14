@@ -36,9 +36,17 @@ import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
+/**
+ * Unikátna cesta pre MainContent
+ */
+
 object MainDestination : NavigationDestination {
     override val route = "main"
 }
+
+/**
+ * Funkcia na zobrazenie UI komponentov v menu aplikácie
+ */
 
 @Composable
 fun MainContent(
@@ -49,7 +57,9 @@ fun MainContent(
 ) {
     val customFont = LocalCustomFont.current
     val configuration = LocalConfiguration.current
+    // práca so senzorom - orientáciou mobilu
     val orientation = configuration.orientation
+    // definovanie medzier medzi UI prvkami na základe orientácie mobilu
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(120.dp, 10.dp) // portrait orientation
@@ -65,6 +75,7 @@ fun MainContent(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // zobrazenie rozloženia pre "portrait" režim aplikácie
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             Spacer(modifier = Modifier.height(spacerList[0]))
@@ -96,6 +107,7 @@ fun MainContent(
                 customFont = customFont,
                 onLogout = onLogout
             )
+            // zobrazenie rozloženia pre "landscape" režim aplikácie
         } else {
             Spacer(modifier = Modifier.height(spacerList[0]))
             TextTitle(
@@ -128,6 +140,9 @@ fun MainContent(
     }
 }
 
+/**
+ * funkcia tlačidla na prechod do sekcie ReceiveOrderContent
+ */
 @Composable
 fun ButtonRecieveOrder(
     onReceiveOrder: () -> Unit
@@ -145,6 +160,9 @@ fun ButtonRecieveOrder(
     }
 }
 
+/**
+ * funkcia tlačidla na prechod do sekcie OrderContent
+ */
 @Composable
 fun ButtonNewOrder(
     onNewOrder: () -> Unit
@@ -162,6 +180,9 @@ fun ButtonNewOrder(
     }
 }
 
+/**
+ * funkcia tlačidla na prechod do sekcie StorageContent
+ */
 @Composable
 fun ButtonStorage(
     onStorage: () -> Unit
@@ -179,6 +200,9 @@ fun ButtonStorage(
     }
 }
 
+/**
+ * funkcia tlačidla na odhlásenie sa z aplikácie
+ */
 @Composable
 fun LogoutButton(
     customFont: FontFamily,

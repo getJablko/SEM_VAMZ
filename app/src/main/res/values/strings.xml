@@ -47,6 +47,6 @@
     <string name="ItemQuantity">item quantity: </string>
     <string name="unknown_quantity">unknown quantity</string>
     <string name="Invalid_order_number">"Invalid order number"</string>
-
+    <string name="one_piece">" /piece"</string>
 
 </resources>

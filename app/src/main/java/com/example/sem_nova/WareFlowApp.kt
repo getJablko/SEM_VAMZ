@@ -7,6 +7,8 @@ import com.example.sem_nova.Navigation.NavigationGraph
 
 /**
  * Top level composable that represents screens for the application.
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
  */
 @Composable
 fun WareFlowApp(navController: NavHostController = rememberNavController()) {

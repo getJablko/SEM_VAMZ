@@ -9,11 +9,16 @@ import com.example.sem_nova.Data.Item
 import com.example.sem_nova.Data.Order
 import java.text.NumberFormat
 
+/**
+ * vievmodel pre tvorbu novej objednávky
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
+
 class NewOrderViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
 
     /**
-     * Holds current item and order ui state
+     * aktualne UI state itemu a objednavky
      */
     var itemUiState by mutableStateOf(ItemUiState())
         private set
@@ -21,8 +26,7 @@ class NewOrderViewModel(private val dataRepository: DataRepository) : ViewModel(
         private set
 
     /**
-     * Updates the [itemUiState] and [orderUiState] with the value provided in the argument. This method also triggers
-     * a validation for input values.
+     * aktualizacia stavov itemov a objednavok
      */
     fun updateUiState(itemDetails: ItemDetails) {
         itemUiState =
@@ -35,7 +39,7 @@ class NewOrderViewModel(private val dataRepository: DataRepository) : ViewModel(
     }
 
     /**
-     * Inserts an [Item] and [Order] in the Room database
+     * vlozenie itemov a objednavok do databázy + ich validácia (povinne polia/udaje)
      */
     suspend fun saveItem() {
         if (validateInput()) {
@@ -64,7 +68,7 @@ class NewOrderViewModel(private val dataRepository: DataRepository) : ViewModel(
 }
 
 /**
- * Represents Ui State for an Item and Order.
+ * Ui State pre Item a Order.
  */
 data class ItemUiState(
     val itemDetails: ItemDetails = ItemDetails(),
@@ -92,9 +96,7 @@ data class OrderDetails(
 )
 
 /**
- * Extension function to convert [ItemUiState] to [Item] and [OrderUiState1] to [Order]. If the value of [ItemDetails.price] is
- * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
- * [ItemUiState] is not a valid [Int], then the quantity will be set to 0
+ * funkcia na konvertovanie [ItemDetails] na [Item] a  [OrderDetails] na [Order]
  */
 fun ItemDetails.toItem(): Item = Item(
     name = name,
@@ -111,13 +113,16 @@ fun OrderDetails.toOrder(): Order = Order(
     arrived = false,
 )
 
+/**
+ * formatovanie ceny na základe meny
+ */
 fun Item.formatedPrice(): String {
     return NumberFormat.getCurrencyInstance().format(price)
 }
 
 
 /**
- * Extension function to convert [Item] to [ItemDetails] and [Order] to [OrderDetails]
+ * funkcia na konvertovanie [Item] na [ItemDetails] a [Order] na [OrderDetails]
  */
 fun Item.toItemDetails(): ItemDetails = ItemDetails(
     name = name,

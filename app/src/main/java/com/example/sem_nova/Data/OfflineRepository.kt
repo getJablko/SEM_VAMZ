@@ -3,6 +3,11 @@ package com.example.sem_nova.Data
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
+/**
+ * Trieda OfflineRepository slúži ako implementácia rozhrania DataRepository
+ * zodpovedá za komunikáciu s databázou pomocou ItemDao a OrderDao
+ */
+
 class OfflineRepository(
     private val itemDao: ItemDao,
     private val orderDao: OrderDao
@@ -23,15 +28,17 @@ class OfflineRepository(
     override suspend fun upsertItem2(item: Item, newQuantity: Int) = itemDao.upsert2(item, newQuantity)
 
     override suspend fun updateOrder(order: Order) = orderDao.update(order)
+    /**
+     * funkcia na aktualizovanie počtu kusov poloziek/itemov na sklade
+     */
     override suspend fun updateStorage(deliveredOrder: Order) {
-        // Find the item in the storage
+        // najdenie itemu v sklade
         val itemInStorage = getItemStream(deliveredOrder.itemName).firstOrNull()
 
-        // If the item exists in storage
+        // overenie existencie itemu
         if (itemInStorage != null) {
-            // Update the quantity of the item
+            // aktualizacia poctu na sklade
             val updatedQuantity =  deliveredOrder.itemQuantity
-
             upsertItem2(itemInStorage, updatedQuantity)
         }
     }

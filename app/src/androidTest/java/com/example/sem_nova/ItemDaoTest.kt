@@ -18,33 +18,44 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
+/**
+ * Testovacia trieda pre tabulku items
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
+ */
 
 @RunWith(AndroidJUnit4::class)
 class ItemDaoTest {
 
     private lateinit var itemDao: ItemDao
     private lateinit var inventoryDatabase: InventoryDatabase
-    private val item1 = Item( "Apples", 10.0, 20,"A",2.0)
-    private val item2 = Item( "Bananas", 15.0, 97,"B", 1.0)
+    private val item1 = Item("Apples", 10.0, 0, "A", 2.0)
+    private val item2 = Item("Bananas", 15.0, 0, "B", 1.0)
 
+    /**
+     * vytvorenie databázy
+     */
     @Before
     fun createDb() {
         val context: Context = ApplicationProvider.getApplicationContext()
-        // Using an in-memory database because the information stored here disappears when the
-        // process is killed.
         inventoryDatabase = Room.inMemoryDatabaseBuilder(context, InventoryDatabase::class.java)
-            // Allowing main thread queries, just for testing.
             .allowMainThreadQueries()
             .build()
         itemDao = inventoryDatabase.itemDao()
     }
 
+    /**
+     * zatvorenie databázy
+     */
     @After
     @Throws(IOException::class)
     fun closeDb() {
         inventoryDatabase.close()
     }
 
+    /**
+     * testovanie vkladania
+     */
     @Test
     @Throws(Exception::class)
     fun daoInsert_insertsItemIntoDB() = runBlocking {
@@ -53,6 +64,9 @@ class ItemDaoTest {
         assertEquals(allItems[0], item1)
     }
 
+    /**
+     * testovanie ziskavania udajov
+     */
     @Test
     @Throws(Exception::class)
     fun daoGetAllItems_returnsAllItemsFromDB() = runBlocking {
@@ -62,7 +76,9 @@ class ItemDaoTest {
         assertEquals(allItems[1], item2)
     }
 
-
+    /**
+     * vlozenie a overenie itemu/polozky do DB
+     */
     @Test
     @Throws(Exception::class)
     fun daoGetItem_returnsItemFromDB() = runBlocking {
@@ -71,6 +87,9 @@ class ItemDaoTest {
         assertEquals(item.first(), item1)
     }
 
+    /**
+     * zmazanie a overenie itemu/polozky z DB
+     */
     @Test
     @Throws(Exception::class)
     fun daoDeleteItems_deletesAllItemsFromDB() = runBlocking {
@@ -81,22 +100,31 @@ class ItemDaoTest {
         assertTrue(allItems.isEmpty())
     }
 
+    /**
+     * aktualizovanie a overenie itemu/polozky v DB
+     */
     @Test
     @Throws(Exception::class)
     fun daoUpdateItems_updatesItemsInDB() = runBlocking {
         addTwoItemsToDb()
-        itemDao.upsert(Item("Apples", 15.0, 25,"C",3.0))
-        itemDao.upsert(Item("Bananas", 5.0, 50,"D",4.0))
+        itemDao.upsert2(Item("Apples", 15.0, 25, "C", 3.0),25)
+        itemDao.upsert2(Item("Bananas", 5.0, 50, "D", 4.0),50)
 
         val allItems = itemDao.getAllItems().first()
-        assertEquals(allItems[0], Item("Apples", 15.0, 25,"C",3.0))
-        assertEquals(allItems[1], Item("Bananas", 5.0, 50,"D",4.0))
+        assertEquals(allItems[0], Item("Apples", 15.0, 25, "C", 3.0))
+        assertEquals(allItems[1], Item("Bananas", 5.0, 50, "D", 4.0))
     }
 
+    /**
+     * vlozenie novej polozky/itemu
+     */
     private suspend fun addOneItemToDb() {
         itemDao.upsert(item1)
     }
 
+    /**
+     * vlozenie novych poloziek/itemov
+     */
     private suspend fun addTwoItemsToDb() {
         itemDao.upsert(item1)
         itemDao.upsert(item2)

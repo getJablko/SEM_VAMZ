@@ -4,6 +4,7 @@ import android.content.Context
 
 /**
  * App container for Dependency injection.
+ * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
  */
 interface AppContainer {
     val dataRepository: DataRepository

@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sem_nova.AppViewModelProvider
 import com.example.sem_nova.Data.Item
@@ -40,20 +41,31 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 import java.text.NumberFormat
 
+/**
+ * Unikátna cesta pre StorageContent
+ */
+
 object StorageDestination : NavigationDestination {
     override val route = "storage"
 }
+
+/**
+ * funkcia na zobrazenie UI obrazovky skladu
+ */
 
 @Composable
 fun StorageContent(
     navigateToItemUpdate: (String) -> Unit,
     onHome: () -> Unit,
+    // vytvorenie viewmodelu pre túto obrazovku
     viewModel: StorageViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val customFont = LocalCustomFont.current
-    val homeUiState by viewModel.storageUiState.collectAsState()
+    // načitanie storageUiState z viewmodelu - list itemov
+    val storageUiState by viewModel.storageUiState.collectAsState()
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
+    // list medzie na základe orientácie zariadenia
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(35.dp, 25.dp) // portrait orientation
@@ -64,16 +76,18 @@ fun StorageContent(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
+        // zobrazovanie homeButtonu na základe orientácie obrazovky - pre lepšie rozloženie
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             HomeButton(onHome = onHome)
         }
         Column(
             modifier = Modifier
-                .weight(1f) // This makes this column take up all available space after the button
+                .weight(1f) // zabratie maximalneho možneho miesta pod buttonom
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+            // zobrazenie nadpisu na základe zadaného parametra
             TextTitle(
                 customFont = customFont,
                 text = stringResource(id = R.string.storage)
@@ -81,16 +95,21 @@ fun StorageContent(
 
             Spacer(modifier = Modifier.height(spacerList[1]))
 
-            Scaffold() { innerPadding ->
-                StorageBody(
-                    itemList = homeUiState.itemList,
-                    onItemClick = navigateToItemUpdate,
-                    contentPadding = innerPadding
-                )
-            }
+            // zavolanie funkcie na zobrazenie položiek skladu
+            StorageBody(
+                itemList = storageUiState.itemList,
+                onItemClick = navigateToItemUpdate,
+            )
+
         }
     }
 }
+
+/**
+ * funkcia na zobrazenie položiek skladu
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
+ */
 
 @Composable
 fun StorageBody(
@@ -105,6 +124,7 @@ fun StorageBody(
             .fillMaxSize()
             .background(Color(226, 207, 253, 255)),
     ) {
+        // ak je sklad prázdny
         if (itemList.isEmpty()) {
             Text(
                 text = stringResource(R.string.no_item_description),
@@ -112,6 +132,7 @@ fun StorageBody(
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(contentPadding),
             )
+            // ak sa v sklade nachádzajú položky
         } else {
             InventoryList(
                 itemList = itemList,
@@ -122,6 +143,11 @@ fun StorageBody(
     }
 }
 
+/**
+ * funkcia, ktorá načíta položky do lazyColumn pomocou funkcie InventoryItem
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
+ */
 
 @Composable
 fun InventoryList(
@@ -141,18 +167,25 @@ fun InventoryList(
                 item = item,
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { onItemClick(item) } // Ensure the clickable modifier also uses the correct function
+                    .clickable { onItemClick(item) }
             )
         }
     }
 }
 
+/**
+ * funkcia, ktorá načíta položku do UI komponentu Card, kde sa zobrazujú informácie o tejto položke
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
+ */
 
 @Composable
 fun InventoryItem(
     item: Item,
     modifier: Modifier = Modifier
 ) {
+    val customFont = LocalCustomFont.current
+
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -169,16 +202,26 @@ fun InventoryItem(
                 Text(
                     text = item.name,
                     style = MaterialTheme.typography.titleLarge,
+                    fontFamily = customFont,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = NumberFormat.getCurrencyInstance().format(item.price).toString() + " per one piece",
-                    style = MaterialTheme.typography.titleMedium
+                    text = NumberFormat.getCurrencyInstance().format(item.price)
+                        .toString() + stringResource(R.string.one_piece),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontFamily = customFont,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
                 )
             }
             Text(
                 text = stringResource(R.string.in_stock, item.quantity),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                fontFamily = customFont,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
             )
         }
     }

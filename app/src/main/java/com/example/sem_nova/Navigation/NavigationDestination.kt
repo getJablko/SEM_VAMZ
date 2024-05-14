@@ -1,11 +1,13 @@
 package com.example.sem_nova.Navigation
 
 /**
- * Interface to describe the navigation destinations for the app
+ * Interface pre navigáciu v aplikácii, definuje cesty
+ * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
  */
 interface NavigationDestination {
     /**
-     * Unique name to define the path for a composable
+     * Unique path name
      */
     val route: String
 }

@@ -10,6 +10,9 @@ import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
+/**
+ * Dao pre tabulku items
+ */
 @Dao
 interface ItemDao {
     @Query("SELECT * from items ORDER BY name ASC")
@@ -19,37 +22,54 @@ interface ItemDao {
     fun getItem(name: String): Flow<Item>
 
     @Query("UPDATE items SET quantity = :quantity, price = :price, place = :place, weight = :weight WHERE name = :name")
-    suspend fun updateQuantity(name: String, quantity: Int, price: Double, place: String, weight: Double)
+    suspend fun updateQuantity(
+        name: String,
+        quantity: Int,
+        price: Double,
+        place: String,
+        weight: Double
+    )
 
+    /**
+     * custom upsert funkcia pre aktualizovanie/vlozenie nedorucenych poloziek na sklad
+     * napr. vytvorenie novej objednavky
+     */
     @Transaction
     suspend fun upsert(item: Item) {
         val existingItem = getItem(item.name).firstOrNull()
         if (existingItem != null) {
-            // Item exists, update its quantity
+            // uprav mnozstvo
             val newQuantity = existingItem.quantity //- 1
-            updateQuantity(item.name, newQuantity,item.price,item.place,item.weight)
+            updateQuantity(item.name, newQuantity, item.price, item.place, item.weight)
         } else {
-            // Item doesn't exist, insert it
+            // ak neexistuje tak insert
             insertNew(item)
         }
     }
 
+    /**
+     * custom upsert funkcia pre aktualizovanie/vlozenie dorucenych poloziek na sklad
+     * napr. dorucenie objednavky
+     */
     @Transaction
     suspend fun upsert2(item: Item, newQuantity: Int) {
         val existingItem = getItem(item.name).firstOrNull()
         if (existingItem != null) {
-            // Item exists, update its quantity
+            // uprav mnozstvo
             val newQuantity = existingItem.quantity + newQuantity
-            updateQuantity(item.name, newQuantity,item.price,item.place,item.weight)
+            updateQuantity(item.name, newQuantity, item.price, item.place, item.weight)
         } else {
-            // Item doesn't exist, insert it
+            // ak neexistuje tak insert
             insertNew(item)
         }
     }
 
+    /**
+     * insert pre novy item
+     */
     @Insert
     suspend fun insertNew(item: Item) {
-        // Set quantity to 0 before insertion
+        // nastavenie pociatocnej pocetnosti na 0 - tovar nie je doruceny
         val itemWithDefaultQuantity = item.copy(quantity = 0)
         insertInternal(itemWithDefaultQuantity)
     }
@@ -57,11 +77,12 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertInternal(item: Item)
 
-
     @Update
     suspend fun update(item: Item)
+
     @Insert
     suspend fun insert(item: Item)
+
     @Delete
     suspend fun delete(item: Item)
 }

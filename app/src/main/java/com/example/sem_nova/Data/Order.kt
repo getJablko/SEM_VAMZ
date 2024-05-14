@@ -3,7 +3,9 @@ package com.example.sem_nova.Data
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-
+/**
+ * entita/tabulka orders s atribútmi
+ */
 @Entity(tableName = "orders", foreignKeys = [ForeignKey(entity = Item::class, parentColumns = ["name"], childColumns = ["itemName"])])
 data class Order(
     @PrimaryKey(autoGenerate = true)

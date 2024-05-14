@@ -24,6 +24,10 @@ import com.example.sem_nova.GUI.ReceivedOrderScreen.ReceiveOrderContent
 import com.example.sem_nova.GUI.StorageScreen.StorageContent
 import com.example.sem_nova.GUI.StorageScreen.StorageDestination
 
+/**
+ * Funkcia zodpovedná za navigáciu v aplikácií pomocou NavHostController
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 
 @Composable
 fun NavigationGraph(
@@ -55,6 +59,7 @@ fun NavigationGraph(
             OrderContent(
                 onHome = { navController.navigate(MainDestination.route) },
                 onNewOrder = { navController.navigate(NewOrderDestination.route) },
+                // presmerovanie na screen konkrétnej objednávky
                 onCurrentOrder = { navController.navigate("${OrderDetailDestination.route}/$it") }
             )
         }
@@ -70,6 +75,7 @@ fun NavigationGraph(
         ) {
             StorageContent(
                 onHome = { navController.navigate(MainDestination.route) },
+                // presmerovanie na screen konkrétnej polozky skladu
                 navigateToItemUpdate = { navController.navigate("${ItemDetailDestination.route}/$it") }
             )
         }
@@ -96,10 +102,7 @@ fun NavigationGraph(
                 type = NavType.StringType
             })
         ) {
-            ItemDetailContent(
-                onHome = { navController.navigate(StorageDestination.route) },
-                onDelete = { navController.navigate(StorageDestination.route) }
-            )
+            ItemDetailContent()
         }
 
 

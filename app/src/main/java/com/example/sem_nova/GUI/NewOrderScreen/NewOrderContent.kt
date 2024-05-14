@@ -46,19 +46,27 @@ import kotlinx.coroutines.launch
 import java.util.Currency
 import java.util.Locale
 
+/**
+ * Unikátna cesta pre NewOrderContent
+ */
 
 object NewOrderDestination : NavigationDestination {
     override val route = "new_order"
 }
 
+/**
+ * funkcia na zobrazenie UI komponentov pre NewOrderContent
+ */
 @Composable
 fun NewOrderContent(
     onHome: () -> Unit,
+    // inicializácia viewmodelu
     viewModel: NewOrderViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val customFont = LocalCustomFont.current
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
+    // list medzier na základe orientácie zariadenia
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(35.dp, 25.dp) // portrait orientation
@@ -69,6 +77,7 @@ fun NewOrderContent(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
+        // zobrazenie homeButtonu na základe orientácie
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             HomeButton(onHome = onHome)
         }
@@ -88,6 +97,9 @@ fun NewOrderContent(
 
         }
     }
+    /**
+     * Prevzatá časť kódu z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+     */
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
     ) { innerPadding ->
@@ -117,7 +129,10 @@ fun NewOrderContent(
     }
 }
 
-
+/**
+ * funkcia na zobrazenie formulára pri tvorbe objednávok + button na ich potvrdenie
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun ItemEntryBody(
     itemUiState: ItemUiState,
@@ -132,6 +147,7 @@ fun ItemEntryBody(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
+        // formulár/textové polia potrebne pre vytvorenie novej objednavky
         ItemInputForm(
             itemDetails = itemUiState.itemDetails,
             orderDetails = orderUiState1.orderDetails,
@@ -139,6 +155,7 @@ fun ItemEntryBody(
             onOrderValueChange = onOrderValueChange,
             modifier = Modifier.fillMaxWidth()
         )
+        // button na vytvorenie objednavky
         Button(
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
@@ -164,6 +181,10 @@ fun ItemEntryBody(
     }
 }
 
+/**
+ * funkcia, zobrazuje textove polia, ktore je potrebne vyplnit, zároven vytvara novy item a aj objednávku ktora ho bude obsahovat
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun ItemInputForm(
     itemDetails: ItemDetails,
@@ -178,8 +199,10 @@ fun ItemInputForm(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // textfield pre meno itemu
         OutlinedTextField(
             value = itemDetails.name,
+            // vlozenie udajov do itemu a aj objednavky
             onValueChange = {
                 onValueChange(itemDetails.copy(name = it))
                 onOrderValueChange(orderDetails.copy(itemName = it))
@@ -192,10 +215,11 @@ fun ItemInputForm(
                 androidx.compose.material3.Text(
                     text = stringResource(R.string.new_name),
                     style = TextStyle(
-                        fontFamily = customFont, // Change label font
+                        fontFamily = customFont,
                     )
                 )
             },
+            // zmena farieb
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color(226, 207, 253),
                 unfocusedContainerColor = Color(226, 207, 253),
@@ -205,6 +229,7 @@ fun ItemInputForm(
             enabled = enabled,
             singleLine = true,
         )
+        // textfield pre cenu itemu
         OutlinedTextField(
             value = itemDetails.price,
             onValueChange = { onValueChange(itemDetails.copy(price = it)) },
@@ -217,7 +242,7 @@ fun ItemInputForm(
                 androidx.compose.material3.Text(
                     text = stringResource(R.string.new_price),
                     style = TextStyle(
-                        fontFamily = customFont, // Change label font
+                        fontFamily = customFont,
                     )
                 )
             },
@@ -231,6 +256,7 @@ fun ItemInputForm(
             enabled = enabled,
             singleLine = true
         )
+        // textfield pre počet ks. itemu
         OutlinedTextField(
             value = itemDetails.quantity,
             onValueChange = {
@@ -246,7 +272,7 @@ fun ItemInputForm(
                 androidx.compose.material3.Text(
                     text = stringResource(R.string.new_quantity),
                     style = TextStyle(
-                        fontFamily = customFont, // Change label font
+                        fontFamily = customFont,
                     )
                 )
             }, colors = OutlinedTextFieldDefaults.colors(
@@ -258,6 +284,7 @@ fun ItemInputForm(
             enabled = enabled,
             singleLine = true
         )
+        // textfield pre miesto dorucenia/uskladnenia itemu
         OutlinedTextField(
             value = itemDetails.place,
             onValueChange = { onValueChange(itemDetails.copy(place = it)) },
@@ -269,7 +296,7 @@ fun ItemInputForm(
                 androidx.compose.material3.Text(
                     text = stringResource(R.string.new_place),
                     style = TextStyle(
-                        fontFamily = customFont, // Change label font
+                        fontFamily = customFont,
                     )
                 )
             }, colors = OutlinedTextFieldDefaults.colors(
@@ -281,6 +308,7 @@ fun ItemInputForm(
             enabled = enabled,
             singleLine = true
         )
+        // textfield pre váhu 1 ks. itemu
         OutlinedTextField(
             value = itemDetails.weight,
             onValueChange = { onValueChange(itemDetails.copy(weight = it)) },
@@ -293,7 +321,7 @@ fun ItemInputForm(
                 androidx.compose.material3.Text(
                     text = stringResource(R.string.new_weigth),
                     style = TextStyle(
-                        fontFamily = customFont, // Change label font
+                        fontFamily = customFont,
                     )
                 )
             }, colors = OutlinedTextFieldDefaults.colors(
@@ -305,6 +333,7 @@ fun ItemInputForm(
             enabled = enabled,
             singleLine = true
         )
+        // zobrazenie textu o povinnych poliach
         if (enabled) {
             androidx.compose.material3.Text(
                 text = stringResource(R.string.required_fields),

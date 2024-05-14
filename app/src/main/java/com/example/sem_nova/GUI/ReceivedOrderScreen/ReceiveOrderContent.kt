@@ -52,27 +52,37 @@ import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
+/**
+ * Unikátna cesta pre ReceiveOrderContent
+ */
 
 object ReceiveOrderDestination : NavigationDestination {
     override val route = "receive_order"
 }
 
+/**
+ * funkcia na zobrazenie UI pre ReceiveOrderContent
+ */
 @Composable
 fun ReceiveOrderContent(
     onHome: () -> Unit,
+    // inicializácia viewmodelu
     viewModel: ReceiveOrderViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val context = LocalContext.current
     val customFont = LocalCustomFont.current
     val focusRequester = remember { FocusRequester() }
     var isTextFieldFocused by remember { mutableStateOf(false) }
+    // zachovanie textu aj po zmene orientácie
     var RecivedOrderNumberText by rememberSaveable {
         mutableStateOf(context.getString(R.string.receivedOrderNumberOrder))
     }
+    // premenna na spracovanie vysledkov z kamery
     val cameraLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* handle result if needed */ }
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* spracovanie vysledku */ }
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
+    // list medzier na základe orientácie
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(35.dp, 20.dp, 40.dp, 20.dp, 10.dp) // portrait orientation
@@ -83,12 +93,13 @@ fun ReceiveOrderContent(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[0]))
+        // zobrazenie homeButtonu na základe orientácie zariadenia - lepsie rozlozenie
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             HomeButton(onHome = onHome)
         }
         Column(
             modifier = Modifier
-                .weight(1f) // This makes this column take up all available space after the button
+                .weight(1f) // zabratie vsetkeho miesta pod homeButtnom
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -96,6 +107,7 @@ fun ReceiveOrderContent(
 
             Spacer(modifier = Modifier.height(spacerList[1]))
 
+            // nadpis na základe zadaného parametra
             TextTitle(
                 customFont = customFont,
                 text = stringResource(id = R.string.receiveOrderText)
@@ -103,6 +115,7 @@ fun ReceiveOrderContent(
 
             Spacer(modifier = Modifier.height(spacerList[2]))
 
+            // textfield pre zadavanie cisla objednavky
             TextField(
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.White,
@@ -127,6 +140,7 @@ fun ReceiveOrderContent(
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
                     .shadow(10.dp, shape = RoundedCornerShape(30.dp))
+                    // logika zobrazovania textu v textovom poli
                     .onFocusChanged { focusState ->
                         isTextFieldFocused = focusState.isFocused
                         if (focusState.isFocused && !RecivedOrderNumberText.isEmpty() && RecivedOrderNumberText == context.getString(
@@ -148,6 +162,8 @@ fun ReceiveOrderContent(
             )
 
             Spacer(modifier = Modifier.height(spacerList[3]))
+
+            // tlacidlo na potvrdenie objednávky
             ReceivedOrderButton(
                 customFont = customFont,
                 RecivedOrderNumberText = RecivedOrderNumberText,
@@ -155,12 +171,18 @@ fun ReceiveOrderContent(
                 onHome = onHome,
             )
             Spacer(modifier = Modifier.height(spacerList[4]))
+            // button na zapnutie foťáku
             ScanButton(
                 cameraLauncher = cameraLauncher
             )
         }
     }
 }
+
+/**
+ * funkcia na zobrazenie tlacidla pre navrat do Menu
+ * využíva sa vo viacerých obrazovkách
+ */
 
 @Composable
 fun HomeButton(
@@ -179,6 +201,11 @@ fun HomeButton(
         )
     }
 }
+
+/**
+ * funkcia na zobrazenie nadpisov na zaklade zadaného parametra
+ * využíva sa vo viacerých obrazovkách
+ */
 
 @Composable
 fun TextTitle(
@@ -201,6 +228,10 @@ fun TextTitle(
     }
 }
 
+/**
+ * funkcia na zobrazenie tlačidla a spracovania objednávky
+ * logika označovania objednávok za dorucene
+ */
 @Composable
 fun ReceivedOrderButton(
     customFont: FontFamily,
@@ -213,7 +244,7 @@ fun ReceivedOrderButton(
     Button(
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor,
-            contentColor = Color(222, 77, 222) // Farba obsahu v normálnom stave
+            contentColor = Color(222, 77, 222)
         ),
         onClick = {
             try {
@@ -221,18 +252,18 @@ fun ReceivedOrderButton(
                 viewModel.updateOrderId(orderId)
                 viewModel.isOrderValid(orderId) { isValid ->
                     if (isValid == false) {
-                        // Handle the case when the order is not valid
-                        // For example, change button color to red
+                        // zafarbenie tlačidla a chybový výpis
                         buttonColor = Color.Red
+                        Toast.makeText(context, R.string.Invalid_order_number, Toast.LENGTH_SHORT).show()
                     } else {
-                        // Handle the case when the order is valid
+                        // označenie objednávky za dorucenu a aktualizovanie skladu
                         buttonColor = Color.White
                         viewModel.markOrderAsDeliveredAndUpdateStorage(orderId)
                         onHome()
                     }
                 }
             } catch (e: NumberFormatException) {
-                // ak zadný string nie je cislo
+                // ak zadný string nie je cislo - osetrenie výnimky
                 buttonColor = Color.Red
                 Toast.makeText(context, R.string.Invalid_order_number, Toast.LENGTH_SHORT).show()
             }
@@ -245,25 +276,33 @@ fun ReceivedOrderButton(
     ) {
         Text(
             text = context.getString(R.string.receiveOrder),
-            fontFamily = customFont, // vlastný font pre text
+            fontFamily = customFont,
             fontSize = 20.sp,
             textAlign = TextAlign.Center
         )
     }
 }
 
+
+/**
+ * funkcia na zobrazenie tlačidla s obrázkom na otvorenie fotoaplikácie
+ */
 @Composable
 fun ScanButton(
+    // parameter slúži na spustenie aktivity fotoaparátu
     cameraLauncher: ActivityResultLauncher<Intent>
 ) {
     IconButton(
         onClick = {
+            // vytvorenie akcie
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            // otvorenie fotoaplikacie zaznamenanie obrazku
             cameraLauncher.launch(takePictureIntent)
         },
         modifier = Modifier
             .size(190.dp)
     ) {
+        // obrázok buttonu
         Image(
             painter = painterResource(R.drawable.scan),
             contentDescription = (stringResource(R.string.icon)),

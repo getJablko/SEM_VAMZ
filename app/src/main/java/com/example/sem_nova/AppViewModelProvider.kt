@@ -14,42 +14,44 @@ import com.example.sem_nova.GUI.StorageScreen.StorageViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the SEM_NOVA app
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
  */
 object AppViewModelProvider {
     val Factory = viewModelFactory {
-        // Initializer for StorageViewModel
+
         initializer {
             StorageViewModel(
                 inventoryApplication().container.dataRepository
             )
         }
-        // Initializer for OrderViewModel
+
         initializer<OrderViewModel> {
             OrderViewModel(
                 inventoryApplication().container.dataRepository
             )
         }
-        // Initializer for NewOrderViewModel
+
         initializer<NewOrderViewModel> {
             NewOrderViewModel(
                 inventoryApplication().container.dataRepository
             )
         }
-        // Initializer for NewOrderViewModel
+
         initializer<OrderDetailViewModel> {
             OrderDetailViewModel(
                 this.createSavedStateHandle(),
                 inventoryApplication().container.dataRepository
             )
         }
-        // Initializer for NewOrderViewModel
+
         initializer<ItemDetailViewModel> {
             ItemDetailViewModel(
                 this.createSavedStateHandle(),
                 inventoryApplication().container.dataRepository
             )
         }
-        // Initializer for ReceiveOrderViewModel
+
         initializer<ReceiveOrderViewModel> {
             ReceiveOrderViewModel(
                 inventoryApplication().container.dataRepository
@@ -59,6 +61,7 @@ object AppViewModelProvider {
 }
 
 /**
+ * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
  * Extension function to queries for [WareFlowApplication] object and returns an instance of
  * [WareFlowApplication].
  */

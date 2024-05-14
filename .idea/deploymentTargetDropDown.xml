@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="LoginButtonTest">
-        <State />
-      </entry>
-      <entry key="LoginContentTest">
+      <entry key="ItemDaoTest">
         <State />
       </entry>
       <entry key="Main2Activity">
-        <State />
-      </entry>
-      <entry key="NavigationGraphTest">
         <State />
       </entry>
       <entry key="OrderDaoTest">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="daoInsert_insertsItemIntoDB()">
+        <State />
+      </entry>
+      <entry key="daoUpdateItems_updatesItemsInDB()">
         <State />
       </entry>
     </value>

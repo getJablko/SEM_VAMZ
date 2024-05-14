@@ -40,13 +40,21 @@ import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
+/**
+ * Unikátna cesta pre ItemDetailContent spolu s cestou ku konkrétnej položke na základe jej PK - mena
+ */
+
 object ItemDetailDestination : NavigationDestination {
     override val route = "item_details"
     const val itemName = "name"
     val routeWithArgs = "$route/{$itemName}"
 }
 
-
+/**
+ * funkcia na zobrazenie UI komponentov pre ItemDetailContent
+ * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
+ */
 @Composable
 fun ItemDetailContent(
     viewModel: ItemDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
@@ -57,8 +65,10 @@ fun ItemDetailContent(
     Scaffold(
         modifier = modifier
     ) { innerPadding ->
+        // zavolanie metody na zobrazenie podrobnosti o polozke/iteme
         ItemDetailsBody(
             itemDetailsUiState = uiState.value,
+            // lambda blok - kod, ktory sa vykona po predani polozky
             onSellItem = { viewModel.reduceQuantityByOne() },
 
             modifier = Modifier
@@ -75,7 +85,10 @@ fun ItemDetailContent(
     }
 }
 
-
+/**
+ * funkcia na zobrazenie detailov o iteme/polozke
+ * Upraveny kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 private fun ItemDetailsBody(
     itemDetailsUiState: ItemDetailsUiState,
@@ -116,7 +129,10 @@ private fun ItemDetailsBody(
     }
 }
 
-
+/**
+ * funkcia na nacitanie informacii o iteme/polozke
+ * Upraveny kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun ItemDetails(
     item: Item, modifier: Modifier = Modifier
@@ -160,7 +176,10 @@ fun ItemDetails(
 
     }
 }
-
+/**
+ * funkcia na zobrazenie(formatovanie) a naplnanie riadkov udajmi
+ * Upraveny kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 private fun ItemDetailsRow(
     @StringRes labelResID: Int, itemDetail: String, modifier: Modifier = Modifier

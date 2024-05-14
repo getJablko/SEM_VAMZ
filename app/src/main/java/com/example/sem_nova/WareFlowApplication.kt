@@ -4,6 +4,10 @@ import android.app.Application
 import com.example.sem_nova.Data.AppContainer
 import com.example.sem_nova.Data.AppDataContainer
 
+/**
+ * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
+
 class WareFlowApplication : Application() {
 
     /**

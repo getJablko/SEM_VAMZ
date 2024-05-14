@@ -14,27 +14,38 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel pre označovanie objednávok za doručené.
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
+ */
+
 class ReceiveOrderViewModel(
     private val orderRepository: DataRepository,
 ) : ViewModel() {
-    private var _orderId by mutableStateOf(0)  // Initial invalid orderId
 
+    // počiatočné ID objednávky - pre funkčnost viewmodelu
+    private var _orderId by mutableStateOf(0)
 
-    // UI State to observe order details
+    // UI State na zaznamenávanie OrderDetailsUiState
     private var _orderDetailsUiState = mutableStateOf(OrderDetailsUiState())
 
-
-    // Method to update orderId
+    /**
+     * funkcia na aktualizovanie ID objednávky
+     */
     fun updateOrderId(newOrderId: Int) {
         _orderId = newOrderId
         loadOrderDetails(newOrderId)
     }
 
+    /**
+     * funkcia na načítanie údajov o objednávke na základe jej ID
+     */
     private fun loadOrderDetails(orderId: Int) {
         viewModelScope.launch {
             orderRepository.getOrderStream(orderId)
                 .map { order ->
-                    // Assuming that order could be null, handle that with a meaningful UI state
+                    // order može byt null - počiatočne ID objednávky
                     order?.let {
                         OrderDetailsUiState(
                             arrived = it.arrived,
@@ -55,21 +66,27 @@ class ReceiveOrderViewModel(
     }
 
     /**
-     * Mark the order as arrived and update the [DataRepository]'s data source.
+     * funkcia na označenie objednávky za doručenú a aktualizovanie skladu
      */
     fun markOrderAsDeliveredAndUpdateStorage(deliveredOrderId: Int) {
         viewModelScope.launch {
+            // najdenie objednavky na zaklade zadaného ID
             val deliveredOrder = orderRepository.getOrderStream(deliveredOrderId).firstOrNull()
+            // oznacenie objednavky za dorucenu
             if (deliveredOrder != null) {
                 orderRepository.updateOrder(deliveredOrder.copy(arrived = true))
             }
-            // Trigger an update of the storage data for the delivered order
+            // aktualizovanie skaldu
             if (deliveredOrder != null) {
                 orderRepository.updateStorage(deliveredOrder)
             }
         }
     }
 
+    /**
+     * funkcia na zistenie, či je zadané ID správne (existencia objednávky)
+     * vracia hodnoty true/false
+     */
     fun isOrderValid(deliveredOrderId: Int, callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             val deliveredOrder = orderRepository.getOrderStream(deliveredOrderId).firstOrNull()
@@ -82,14 +99,16 @@ class ReceiveOrderViewModel(
         }
     }
 
-
+    /**
+     * nastavenie timeoutu na 5ms
+     */
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 }
 
 /**
- * UI state for OrderDetailsScreen
+ * UI state pre OrderDetailsContent
  */
 data class OrderDetailsUiState(
     val arrived: Boolean = false,

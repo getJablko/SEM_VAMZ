@@ -45,13 +45,22 @@ import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
+/**
+ * Unikátna cesta pre LoginContent
+ */
+
 object LoginDestination : NavigationDestination {
     override val route = "login"
 }
 
+/**
+ * funkcia na zobrazenie UI prihlasovacej obrazovky
+ */
+
 @Composable
 fun LoginContent(onLoginSuccess: () -> Unit) {
     val context = LocalContext.current
+    // rememberSaveable - sluzi na zapamätanie obsahu aj pri zmene orientácie aplikácie
     var LoginText by rememberSaveable { mutableStateOf(context.getString(R.string.login_hint)) }
     var PasswdText by rememberSaveable { mutableStateOf(context.getString(R.string.password_hint)) }
     val focusRequester = remember { FocusRequester() }
@@ -59,6 +68,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
+    // list medzier na základe orientácie aplikácie
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(155.dp, 50.dp, 16.dp, 90.dp) // portrait orientation
@@ -75,6 +85,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
     ) {
         Spacer(modifier = Modifier.height(spacerList[0]))
 
+        // funkcia na zobrazenie textu na základe zadaného parametra - reťazca
         TextTitle(
             customFont = customFont,
             text = stringResource(id = R.string.welcome_hint)
@@ -82,6 +93,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
 
         Spacer(modifier = Modifier.height(spacerList[1]))
 
+        // textfield pre zadavanie loginu
         TextField(
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.White,
@@ -106,6 +118,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                 .fillMaxSize()
                 .focusRequester(focusRequester)
                 .shadow(10.dp, shape = RoundedCornerShape(30.dp))
+                // logika pre zadávanie loginu do textového poľa
                 .onFocusChanged { focusState ->
                     isTextFieldFocused = focusState.isFocused
                     if ((focusState.isFocused && !LoginText.isEmpty() && LoginText == context.getString(
@@ -128,6 +141,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
         )
 
+        // textfield pre zadavanie hesla
         TextField(
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.White,
@@ -145,12 +159,14 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
                 fontFamily = customFont, // Nastavenie vlastného fontu
                 fontSize = 16.sp
             ),
+            // zobrazenie hesla ako ****
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
                 .padding(30.dp, 15.dp)
                 .fillMaxSize()
                 .focusRequester(focusRequester)
                 .shadow(10.dp, shape = RoundedCornerShape(30.dp))
+                // logika pre zadávanie hesla do textového poľa
                 .onFocusChanged { focusState ->
                     if (focusState.isFocused && !PasswdText.isEmpty() && PasswdText == context.getString(
                             R.string.password_hint
@@ -174,19 +190,25 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
 
         Spacer(modifier = Modifier.height(spacerList[2]))
 
+        // tlačidlo na prihlasovanie
         LoginButton(
             loginText = LoginText,
             passwdText = PasswdText,
             onLoginSuccess = onLoginSuccess,
-            onLoginFailed = { // Callback to handle incorrect login
+            onLoginFailed = { // Callback - čo nastane pri nesprávnom logine
                 LoginText = context.getString(R.string.wrongLogin)
                 PasswdText = context.getString(R.string._hint)
+                // chybová/informačná hláška
                 Toast.makeText(context, R.string.wrongLogin, Toast.LENGTH_SHORT).show()
             },
             spacerList = spacerList
         )
     }
 }
+
+/**
+ * funkcia na zobrazenie tlačidla na prihlasovanie + prihlasovacia logika
+ */
 
 @Composable
 fun LoginButton(
@@ -212,6 +234,7 @@ fun LoginButton(
                     222
                 )
             ),
+            // logika overovania správnosti prihlasovacích údajov
             onClick = {
                 if (loginText == context.getString(R.string.correctLogin) && passwdText == context.getString(
                         R.string.correctLogin
@@ -219,7 +242,7 @@ fun LoginButton(
                 ) {
                     onLoginSuccess()
                 } else {
-                    onLoginFailed() // callback on failed login
+                    onLoginFailed()
                 }
             },
             modifier = Modifier

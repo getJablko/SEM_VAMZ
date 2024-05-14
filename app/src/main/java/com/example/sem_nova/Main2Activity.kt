@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.example.sem_nova.ui.theme.SEM_NOVATheme
-
+/**
+ * Trieda, ktorá slúži na spúšťanie celej aplikácie a nastavenie jej pozadia
+ */
 class Main2Activity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()

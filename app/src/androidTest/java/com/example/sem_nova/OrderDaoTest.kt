@@ -18,17 +18,25 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
+/**
+ * Testovacia trieda pre tabulku orders
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ *
+ */
 @RunWith(AndroidJUnit4::class)
 class OrderDaoTest {
 
     private lateinit var orderDao: OrderDao
     private lateinit var itemDao: ItemDao
     private lateinit var inventoryDatabase: InventoryDatabase
-    private val order1 = Order(1,"Apples",1,true)
-    private val order2 = Order(2, "Bananas",2,true)
+    private val order1 = Order(1, "Apples", 1, true)
+    private val order2 = Order(2, "Bananas", 2, true)
     private val item1 = Item("Apples", 10.0, 20, "A", 2.0)
     private val item2 = Item("Bananas", 15.0, 97, "B", 1.0)
 
+    /**
+     * vytvorenie databázy spolu s items
+     */
     @Before
     fun createDb() {
         val context: Context = ApplicationProvider.getApplicationContext()
@@ -38,72 +46,95 @@ class OrderDaoTest {
         orderDao = inventoryDatabase.orderDao()
         itemDao = inventoryDatabase.itemDao()
 
-        // Insert dummy items into the Item table before inserting orders
+        // vloženie itemov predtym ako vlozime objednavku - relačne obmedzenie
         runBlocking {
             itemDao.upsert(item1)
             itemDao.upsert(item2)
         }
     }
 
+    /**
+     * zatvorenie databázy
+     */
     @After
     @Throws(IOException::class)
     fun closeDb() {
         inventoryDatabase.close()
     }
 
+    /**
+     * testovanie vkladania
+     */
     @Test
     @Throws(Exception::class)
-    fun daoInsert_insertsItemIntoDB() = runBlocking {
-        addOneItemToDb()
-        val allItems = orderDao.getAllItems().first()
-        Assert.assertEquals(allItems[0], order1)
+    fun daoInsert_insertsOrderIntoDB() = runBlocking {
+        addOneOrderToDb()
+        val allOrders = orderDao.getAllItems().first()
+        Assert.assertEquals(allOrders[0], order1)
     }
 
+    /**
+     * testovanie ziskavania udajov
+     */
     @Test
     @Throws(Exception::class)
-    fun daoGetAllItems_returnsAllItemsFromDB() = runBlocking {
-        addTwoItemsToDb()
-        val allItems = orderDao.getAllItems().first()
-        Assert.assertEquals(allItems[0], order1)
-        Assert.assertEquals(allItems[1], order2)
+    fun daoGetAllOrders_returnsAllOrdersFromDB() = runBlocking {
+        addTwoOrdersToDb()
+        val allOrders = orderDao.getAllItems().first()
+        Assert.assertEquals(allOrders[0], order1)
+        Assert.assertEquals(allOrders[1], order2)
     }
 
-
+    /**
+     * vlozenie a overenie objednavky do DB
+     */
     @Test
     @Throws(Exception::class)
-    fun daoGetItem_returnsItemFromDB() = runBlocking {
-        addOneItemToDb()
-        val item = orderDao.getItem(1)
-        Assert.assertEquals(item.first(), order1)
+    fun daoGetOrder_returnsOrdersFromDB() = runBlocking {
+        addOneOrderToDb()
+        val order = orderDao.getItem(1)
+        Assert.assertEquals(order.first(), order1)
     }
 
+    /**
+     * zmazanie a overenie objednavky z DB
+     */
     @Test
     @Throws(Exception::class)
-    fun daoDeleteItems_deletesAllItemsFromDB() = runBlocking {
-        addTwoItemsToDb()
+    fun daoDeleteOrders_deletesAllOrdersFromDB() = runBlocking {
+        addTwoOrdersToDb()
         orderDao.delete(order1)
         orderDao.delete(order2)
-        val allItems = orderDao.getAllItems().first()
-        Assert.assertTrue(allItems.isEmpty())
+        val allOrders = orderDao.getAllItems().first()
+        Assert.assertTrue(allOrders.isEmpty())
     }
 
+    /**
+     * aktualizovanie a overenie objednavky v DB
+     */
     @Test
     @Throws(Exception::class)
-    fun daoUpdateItems_updatesItemsInDB() = runBlocking {
-        addTwoItemsToDb()
-        orderDao.update(Order(1, "Apples",10,true))
-        orderDao.update(Order(2, "Apples",20,true))
+    fun daoUpdateOrderes_updatesOrdersInDB() = runBlocking {
+        addTwoOrdersToDb()
+        orderDao.update(Order(1, "Apples", 10, true))
+        orderDao.update(Order(2, "Apples", 20, true))
 
-        val allItems = orderDao.getAllItems().first()
-        Assert.assertEquals(allItems[0], Order(1, "Apples",10,true))
-        Assert.assertEquals(allItems[1], Order(2, "Apples",20,true))
+        val allOrders = orderDao.getAllItems().first()
+        Assert.assertEquals(allOrders[0], Order(1, "Apples", 10, true))
+        Assert.assertEquals(allOrders[1], Order(2, "Apples", 20, true))
     }
 
-    private suspend fun addOneItemToDb() {
+    /**
+     * vlozenie novej objednavky
+     */
+    private suspend fun addOneOrderToDb() {
         orderDao.insert(order1)
     }
 
-    private suspend fun addTwoItemsToDb() {
+    /**
+     * vlozenie novych objednavok
+     */
+    private suspend fun addTwoOrdersToDb() {
         orderDao.insert(order1)
         orderDao.insert(order2)
     }

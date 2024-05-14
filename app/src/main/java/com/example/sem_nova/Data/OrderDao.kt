@@ -7,7 +7,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-
+/**
+ * Dao pre tabulku orders
+ */
 @Dao
 interface OrderDao {
     @Query("SELECT * from orders ORDER BY orderId ASC")

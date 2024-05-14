@@ -34,6 +34,7 @@ private val LightColorScheme = lightColorScheme(
 
 )
 
+// inicializácia vlastného fontu
 val CustomFont = FontFamily(
     Font(R.font.relay_kavoon_regular)
 )
@@ -65,7 +66,7 @@ fun SEM_NOVATheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
-
+// nastavenie vlastného fontu do Témy
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

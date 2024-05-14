@@ -41,16 +41,23 @@ import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 import kotlinx.coroutines.launch
 
+/**
+ * Unikátna cesta pre OrderDetailContent aj s konkrétnou objednávkou na základe jej ID
+ */
 
 object OrderDetailDestination : NavigationDestination {
     override val route = "order_detail"
     const val orderId = "orderId"
     val routeWithArgs = "$route/{$orderId}"
 }
-
+/**
+ * funkcia na zobrazenie UI komponentov OrderDetailContent
+ * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun OrderDetailContent(
     onHome: () -> Unit,
+    // inicializacia viewmodelu
     viewModel: OrderDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
@@ -60,8 +67,10 @@ fun OrderDetailContent(
     Scaffold(
         modifier = modifier
     ) { innerPadding ->
+        // zavolanie metody na zobrazenie podrobnosti o objednavke
         OrderDetailsBody(
             orderDetailsUiState = uiState.value,
+            // lambda blok - kod, ktory sa vykona po doruceny objednavky
             onArrivedOrder = { order ->
                 coroutineScope.launch {
                     viewModel.markOrderAsDeliveredAndUpdateStorage(order)
@@ -82,7 +91,10 @@ fun OrderDetailContent(
     }
 }
 
-
+/**
+ * funkcia na zobrazenie detailov o objednavke
+ * Upraveny kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 private fun OrderDetailsBody(
     orderDetailsUiState: OrderDetailsUiState,
@@ -94,9 +106,11 @@ private fun OrderDetailsBody(
         modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // funkcia na zobrazenie informacii o objednavke
         OrderDetails(
             order = orderDetailsUiState.orderDetails.toOrder(), modifier = Modifier.fillMaxWidth()
         )
+        // button na oznacenie dorucenia objednavky
         Button(
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
@@ -122,7 +136,10 @@ private fun OrderDetailsBody(
     }
 }
 
-
+/**
+ * funkcia na nacitanie informacii o objednavke
+ * Upraveny kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun OrderDetails(
     order: Order, modifier: Modifier = Modifier
@@ -162,6 +179,10 @@ fun OrderDetails(
     }
 }
 
+/**
+ * funkcia na zobrazenie(formatovanie) a naplnanie riadkov udajmi
+ * Upraveny kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 private fun ItemDetailsRow(
     @StringRes labelResID: Int, orderDetail: String, modifier: Modifier = Modifier

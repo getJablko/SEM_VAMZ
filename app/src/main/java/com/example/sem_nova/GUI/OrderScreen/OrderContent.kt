@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sem_nova.AppViewModelProvider
 import com.example.sem_nova.Data.Order
@@ -48,20 +49,29 @@ import com.example.sem_nova.Navigation.NavigationDestination
 import com.example.sem_nova.R
 import com.example.sem_nova.ui.theme.LocalCustomFont
 
+/**
+ * Unikátna cesta pre OrderContent
+ */
+
 object OrderDestination : NavigationDestination {
     override val route = "order"
 }
 
+/**
+ * funkcia na zobrazenie UI komponentov pre OrderContent
+ */
 @Composable
 fun OrderContent(
     onHome: () -> Unit,
     onNewOrder: () -> Unit,
     onCurrentOrder: (Int) -> Unit,
+    // inicializacia viewmodelu
     viewModel: OrderViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val customFont = LocalCustomFont.current
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
+    // list medzie na základe orientácie
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             listOf(20.dp, 35.dp) // portrait orientation
@@ -73,13 +83,14 @@ fun OrderContent(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(spacerList[1]))
+        // zobrazenie homeButtonu na základe oreintácie obrazovky zaridenia
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             HomeButton(onHome = onHome)
         }
 
         Column(
             modifier = Modifier
-                .weight(1f) // This makes this column take up all available space after the button
+                .weight(1f) // zabratie vsetkeho miesta pod homebuttnom
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -90,13 +101,15 @@ fun OrderContent(
             )
             Spacer(modifier = Modifier.height(spacerList[0]))
 
+            // scafold - zobrazenie FloatingActionButton na vytvarenie novycj objednávok
             Scaffold(
-
                 floatingActionButton = {
                     FloatingActionButton(
                         onClick = { onNewOrder() },
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier
+                            // nastavenie paddingu
+                            // Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
                             .padding(
                                 end = WindowInsets.safeDrawing.asPaddingValues()
                                     .calculateEndPadding(LocalLayoutDirection.current)
@@ -108,6 +121,7 @@ fun OrderContent(
                         )
                     }
                 },
+                // zavolanie funkcie na zobrazenie zoznamu objednávok
             ) { innerPadding ->
                 OrderBody(
                     orderList = orderUiState.orderList,
@@ -119,7 +133,10 @@ fun OrderContent(
     }
 }
 
-
+/**
+ * funkcia na zobrazenie objednávok
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun OrderBody(
     orderList: List<Order>,
@@ -133,6 +150,7 @@ fun OrderBody(
             .fillMaxSize()
             .background(Color(226, 207, 253, 255)),
         ) {
+        // ak neexistuju objednavky
         if (orderList.isEmpty()) {
             Text(
                 text = stringResource(R.string.no_order_description),
@@ -140,6 +158,7 @@ fun OrderBody(
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(contentPadding),
             )
+        // ak existujú objednávky
         } else {
             OrderList(
                 orderList = orderList,
@@ -150,6 +169,10 @@ fun OrderBody(
     }
 }
 
+/**
+ * funkcia na zobrazenie jednotlivých objednávok v LazyColumn s informáciami o nich
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun OrderList(
     orderList: List<Order>,
@@ -164,6 +187,7 @@ fun OrderList(
         contentPadding = contentPadding
     ) {
         items(items = orderList, key = { it.orderId }) { order ->
+            // zavolanie funkcie InventoryOrder na načitanie udajov o objednavke
             InventoryOrder(
                 order = order,
                 modifier = Modifier
@@ -174,12 +198,16 @@ fun OrderList(
     }
 }
 
-
+/**
+ * funkcia na zobrazenie údajov o objednávkach na jednotlivých Cards
+ * Upravený kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
+ */
 @Composable
 fun InventoryOrder(
     order: Order,
     modifier: Modifier = Modifier
 ) {
+    val customFont = LocalCustomFont.current
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = Color(241, 224, 254, 255))
@@ -195,11 +223,17 @@ fun InventoryOrder(
                 Text(
                     text = stringResource(R.string.order_ID, order.orderId),
                     style = MaterialTheme.typography.titleLarge,
+                    fontFamily = customFont,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
                 )
             }
             Text(
                 text = stringResource(R.string.number_of_items, order.itemQuantity),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                fontFamily = customFont,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
             )
         }
     }
