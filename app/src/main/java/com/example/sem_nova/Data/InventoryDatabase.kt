@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 /**
  * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
  */
-@Database(entities = [Item::class, Order::class], version = 3, exportSchema = false)
+@Database(entities = [Item::class, Order::class], version = 4, exportSchema = false)
 abstract class InventoryDatabase : RoomDatabase() {
 
     abstract fun itemDao(): ItemDao
@@ -26,7 +26,6 @@ abstract class InventoryDatabase : RoomDatabase() {
                      * permanently deletes all data from the tables in your database when it
                      * attempts to perform a migration with no defined migration path.
                      *  * Upraveny kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
-                     *
                      */
                     .fallbackToDestructiveMigration()
                     .build()

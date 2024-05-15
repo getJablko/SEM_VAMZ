@@ -45,7 +45,6 @@ fun NavigationGraph(
             )
         }
         composable(route = MainDestination.route) {
-
             MainContent(
                 onLogout = { navController.navigate(LoginDestination.route) },
                 onNewOrder = { navController.navigate(OrderDestination.route) },

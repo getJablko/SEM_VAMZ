@@ -77,9 +77,13 @@ fun ReceiveOrderContent(
     var RecivedOrderNumberText by rememberSaveable {
         mutableStateOf(context.getString(R.string.receivedOrderNumberOrder))
     }
+
     // premenna na spracovanie vysledkov z kamery
     val cameraLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { /* spracovanie vysledku */ }
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { /* spracovanie vysledku */ }
+
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
     // list medzier na základe orientácie
@@ -254,7 +258,8 @@ fun ReceivedOrderButton(
                     if (isValid == false) {
                         // zafarbenie tlačidla a chybový výpis
                         buttonColor = Color.Red
-                        Toast.makeText(context, R.string.Invalid_order_number, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.Invalid_order_number, Toast.LENGTH_SHORT)
+                            .show()
                     } else {
                         // označenie objednávky za dorucenu a aktualizovanie skladu
                         buttonColor = Color.White

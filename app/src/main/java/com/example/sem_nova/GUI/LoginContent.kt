@@ -68,6 +68,7 @@ fun LoginContent(onLoginSuccess: () -> Unit) {
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val configuration = LocalConfiguration.current
     val orientation = configuration.orientation
+
     // list medzier na základe orientácie aplikácie
     val spacerList = remember {
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
