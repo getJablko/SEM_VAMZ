@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel to retrieve, update and delete an item from the [DataRepository]'s data source.
+ * vievmodel pre správu poloziek/itemov
+ * Prevzatý kód z projektu dostupného na: https://github.com/google-developer-training/basic-android-kotlin-compose-training-inventory-app.git
  */
-
 class ItemDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: DataRepository,
@@ -26,8 +26,7 @@ class ItemDetailViewModel(
     private val name: String = checkNotNull(savedStateHandle[ItemDetailDestination.itemName])
 
     /**
-     * Holds the item details ui state. The data is retrieved from [DataRepository] and mapped to
-     * the UI state.
+     * uchováva UI stav itemu
      */
     val uiState: StateFlow<ItemDetailsUiState> =
         itemsRepository.getItemStream(name)
@@ -41,7 +40,7 @@ class ItemDetailViewModel(
             )
 
     /**
-     * Reduces the item quantity by one and update the [DataRepository]'s data source.
+     * predanie 1 ks itemu
      */
     fun reduceQuantityByOne() {
         viewModelScope.launch {
@@ -58,7 +57,7 @@ class ItemDetailViewModel(
 }
 
 /**
- * UI state for ItemDetailsScreen
+ * UI state pre ItemDetailsScreen
  */
 data class ItemDetailsUiState(
     val outOfStock: Boolean = true,
